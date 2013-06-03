@@ -13,6 +13,8 @@
 #include <util/atomic.h>
 #include <util/crc16.h>
 
+#include "hmac-sha1.h"
+
 //#include "simple_ds18b20.h"
 //#include "onewire.h"
 
@@ -23,44 +25,27 @@
 // to be a multiple.
 
 #define TICK 1
-// we have 1024 prescaler, 32768 crystal.
-#define SLEEP_COMPARE (32*TICK-1)
-
+#define SLEEP_COMPARE (2000000/64)   // == 31250 exactly
+#define NKEYS 6
 #define KEYLEN 20
-
-#define VALUE_NOSENSOR 0x07D0 // 125 degrees
-#define VALUE_BROKEN 0x07D1 // 125.0625
-
-#define OVERSHOOT_MAX_DIV 1800.0 // 30 mins
-#define WORT_INVALID_TIME 900 // 15 mins
-// fridge min/max are only used if the wort sensor is invalid
-#define FRIDGE_AIR_MIN_RANGE 40 // 4º
-#define FRIDGE_AIR_MAX_RANGE 40 // 4º
 
 #define BAUD 19200
 #define UBRR ((F_CPU)/8/(BAUD)-1)
 
+// XXX
+#define PORT_PI_BOOT PORTD
+#define DDR_PI_BOOT DDRD
+#define PIN_PI_BOOT PD7
+
+// XXX
+#define PORT_PI_RESET PORTD
+#define DDR_PI_RESET DDRD
+#define PIN_PI_RESET PD6
+
+
 #define PORT_LED PORTC
 #define DDR_LED DDRC
 #define PIN_LED PC4
-
-#define PORT_SHDN PORTD
-#define DDR_SHDN DDRD
-#define PIN_SHDN PD7
-
-#define PORT_FRIDGE PORTD
-#define DDR_FRIDGE DDRD
-#define PIN_FRIDGE PD6
-
-// total amount of 16bit values available for measurements.
-// adjust emperically, be sure to allow enough stack space too
-#define TOTAL_MEASUREMENTS 800
-
-// each sensor slot uses 8 bytes
-#define MAX_SENSORS 6
-
-// fixed at 8, have a shorter name
-#define ID_LEN OW_ROMCODE_SIZE
 
 // #define HAVE_UART_ECHO
 
@@ -75,13 +60,12 @@ struct epoch_ticks
 
 // eeprom-settable parameters, default values defined here. 
 // all timeouts should be a multiple of TICK
-static uint32_t watchdog_long_limit = 60*60*24;
+static uint32_t watchdog_long_limit = (60L*60*24);
 static uint32_t watchdog_short_limit = 0;
 static uint32_t newboot_limit = 60*10;
 
 // avr proves itself
-static uint8_t avr_keys[NKEYS][KEYLEN] = {0};
-
+static uint8_t avr_keys[NKEYS][KEYLEN] = {{0}};
 
 // ---- Atomic guards required accessing these variables
 // clock_epoch in seconds
@@ -89,14 +73,18 @@ static uint32_t clock_epoch;
 // watchdog counts up
 static uint32_t watchdog_long_count;
 static uint32_t watchdog_short_count;
-// newboot counts down - it's a one-shot
+// newboot counts down
 static uint32_t newboot_count;
+// oneshot counts down
+static uint32_t oneshot_count;
+
 // ---- End atomic guards required
 
 // boolean flags
 static uint8_t watchdog_long_hit;
 static uint8_t watchdog_short_hit;
 static uint8_t newboot_hit;
+static uint8_t oneshot_hit;
 
 static uint8_t readpos;
 static char readbuf[50];
@@ -106,6 +94,7 @@ int uart_putchar(char c, FILE *stream);
 static void long_delay(int ms);
 static void blink();
 static uint16_t adc_vcc();
+static void set_pi_boot_normal(uint8_t normal);
 
 static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
         _FDEV_SETUP_WRITE);
@@ -123,12 +112,10 @@ struct __attribute__ ((__packed__)) __eeprom_data {
     uint32_t watchdog_short_limit;
     uint32_t newboot_limit;
 
-    uint8_t avr_key[NKEYS][KEYLEN];
+    uint8_t avr_keys[NKEYS][KEYLEN];
 
     uint16_t magic;
 };
-
-static void deep_sleep();
 
 // Very first setup
 static void
@@ -147,7 +134,6 @@ setup_chip()
 
     // Set clock to 2mhz
     CLKPR = _BV(CLKPCE);
-    // divide by 4
     CLKPR = _BV(CLKPS1);
 
     // enable pullups
@@ -188,20 +174,20 @@ get_epoch_ticks(struct epoch_ticks *t)
 static void
 setup_tick_counter()
 {
+    // set up counter1
+
     // set up counter2. 
     // COM21 COM20 Set OC2 on Compare Match (p116)
     // WGM21 Clear counter on compare
     //TCCR2A = _BV(COM2A1) | _BV(COM2A0) | _BV(WGM21);
     // toggle on match
-    TCCR2A = _BV(COM2A0);
-    // CS22 CS21 CS20  clk/1024
-    TCCR2B = _BV(CS22) | _BV(CS21) | _BV(CS20);
-    // set async mode
-    ASSR |= _BV(AS2);
-    TCNT2 = 0;
-    OCR2A = SLEEP_COMPARE;
+    TCCR1A = _BV(COM1A0);
+    // systemclock/1024
+    TCCR1B = _BV(CS12) | _BV(CS10);
+    TCNT1 = 0;
+    OCR1A = SLEEP_COMPARE;
     // interrupt
-    TIMSK2 = _BV(OCIE2A);
+    TIMSK1 = _BV(OCIE1A);
 }
 
 static void 
@@ -219,7 +205,6 @@ uart_on()
     UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
     //8N1
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
-    uart_enabled = 1;
 }
 
 static void 
@@ -227,7 +212,6 @@ uart_off()
 {
     // Turn off interrupts and disable tx/rx
     UCSR0B = 0;
-    uart_enabled = 0;
 
     // Power reduction register
     PRR |= _BV(PRUSART0);
@@ -236,10 +220,6 @@ uart_off()
 int 
 uart_putchar(char c, FILE *stream)
 {
-    if (!uart_enabled)
-    {
-        return EOF;
-    }
     // XXX could perhaps sleep in the loop for power.
     if (c == '\n')
     {
@@ -248,18 +228,10 @@ uart_putchar(char c, FILE *stream)
     }
     loop_until_bit_is_set(UCSR0A, UDRE0);
     UDR0 = c;
-    if (stream == crc_stdout)
-    {
-        crc_out = _crc_ccitt_update(crc_out, c);
-    }
     if (c == '\r')
     {
         loop_until_bit_is_set(UCSR0A, UDRE0);
         UDR0 = '\n';
-        if (stream == crc_stdout)
-        {
-            crc_out = _crc_ccitt_update(crc_out, '\n');
-        }
     }
     return (unsigned char)c;
 }
@@ -274,26 +246,39 @@ cmd_reset()
     while(1); // wait for watchdog to reset processor 
 }
 
+static void
+cmd_newboot()
+{
+    set_pi_boot_normal(1);
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        newboot_count = newboot_limit;
+    }
+    printf_P(PSTR("newboot for %d secs"), newboot_limit);
+}
+
 
 
 static void
 cmd_get_params()
 {
-    uint32_t cur_watchdog_long, cur_watchdog_short, cur_newboot;
+    uint32_t cur_watchdog_long, cur_watchdog_short, cur_newboot, cur_oneshot;
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {
-        cur_watchdog_long = watchdot_long_count;
-        cur_watchdog_short = watchdot_short_count;
-        cur_newboot = newboot_limit_count;
+        cur_watchdog_long = watchdog_long_count;
+        cur_watchdog_short = watchdog_short_count;
+        cur_newboot = newboot_count;
+        cur_oneshot = oneshot_count;
     }
 
-    printf_P(PSTR("limit (count) : watchdog_long %lu (%lu) watchdog_short %lu (%lu) newboot %lu (%lu)\n"),
+    printf_P(PSTR("limit (count) : watchdog_long %lu (%lu) watchdog_short %lu (%lu) newboot %lu (%lu) oneshot (%lu)\n"),
         watchdog_long_limit,
-        watchdog_long_count,
+        cur_watchdog_long,
         watchdog_short_limit,
-        watchdog_short_count,
+        cur_watchdog_short,
         newboot_limit,
-        newboot_count);
+        cur_newboot,
+        cur_oneshot);
 }
 
 static void
@@ -346,20 +331,110 @@ uint8_t from_hex(char c)
     return 0;
 }
 
+static void 
+printhex_nibble(const unsigned char b, FILE *stream)
+{
+    unsigned char  c = b & 0x0f;
+    if ( c > 9 ) { 
+        c += 'A'-10; 
+    }
+    else {
+        c += '0';
+    }
+    fputc(c, stream);
+}
+
+void 
+printhex_byte(const unsigned char b, FILE *stream)
+{
+    printhex_nibble( b >> 4, stream);
+    printhex_nibble( b, stream);
+}
+
+void
+printhex(uint8_t *id, uint8_t n, FILE *stream)
+{
+    for (uint8_t i = 0; i < n; i++)
+    {
+        if (i > 0)
+        {
+            fputc(' ', stream);
+        }
+        printhex_byte(id[i], stream);
+    }
+}
+
+static int8_t
+parse_key(const char *params, uint8_t *key_index, uint8_t bytes[KEYLEN])
+{
+    // "N HEXKEY"
+    if (strlen(params) != KEYLEN*2+2) {
+        printf_P(PSTR("Wrong length key\n"));
+        return -1;
+    }
+
+    if (params[1] != ' ')
+    {
+        printf_P(PSTR("Missing space\n"));
+        return -1;
+    }
+
+    *key_index = from_hex(params[0]);
+    if (*key_index >= NKEYS)
+    {
+        printf_P(PSTR("Bad key index %d, max %d\n"), *key_index, NKEYS);
+        return -1;
+    }
+
+    for (int i = 0, p = 0; i < KEYLEN; i++, p += 2)
+    {
+        bytes[i] = (from_hex(params[p+2]) << 4) | from_hex(params[p+3]);
+    }
+    return 0;
+}
+
 static void
 cmd_set_avr_key(const char *params)
 {
-    // "N HEXKEY"
-    if (strlen(params)) != KEYLEN*2+2) {
-        printf_P(PSTR("Wrong length key\n"));
+    uint8_t new_key[KEYLEN];
+    uint8_t key_index;
+    if (parse_key(params, &key_index, new_key) != 0)
+    {
         return;
     }
+    memcpy(avr_keys[key_index], new_key, sizeof(new_key));
+    eeprom_write(avr_keys, avr_keys);
+}
 
-    uint8_t new_key[KEYLEN];
-    for (int i = 0, p = 0; i < KEYLEN; i++, p += 2)
+static void
+cmd_hmac(const char *params)
+{
+    uint8_t data[KEYLEN];
+    uint8_t key_index;
+    if (parse_key(params, &key_index, data) != 0)
     {
-        new_key[i] = (fromhex(params[p]) << 4) | fromhex(params[p+1]);
+        printf_P(PSTR("FAIL: Bad input\n"));
     }
+
+    hmac_sha1_ctx_t ctx;
+    hmac_sha1_init(&ctx, avr_keys[key_index], KEYLEN);
+    hmac_sha1_lastBlock(&ctx, data, KEYLEN);
+    hmac_sha1_final(data, &ctx);
+
+    printf_P(PSTR("HMAC: "));
+    printhex(data, KEYLEN, stdout);
+    fputc('\n', stdout);
+}
+
+static void
+cmd_oneshot_reboot(const char *params)
+{
+    uint32_t new_delay = strtoul(params, NULL, 10);
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        oneshot_count = new_delay;
+    }
+    printf_P(PSTR("oneshot delay %lu\n"), new_delay);
 }
 
 static void
@@ -371,63 +446,23 @@ load_params()
     {
         eeprom_read(watchdog_long_limit, watchdog_long_limit);
         eeprom_read(watchdog_short_limit, watchdog_short_limit);
-        eeprom_read(netboot_limit);
-        eeprom_read(avr_key);
+        eeprom_read(newboot_limit, newboot_limit);
    }
+
+   eeprom_read(avr_keys, avr_keys);
 }
 
-// returns true if eeprom was written
-static bool
-set_initial_eeprom()
+static void
+cmd_vcc()
 {
-    uint16_t magic;
-    eeprom_read(magic, magic);
-    if (magic == EXPECT_MAGIC)
-    {
-        return false;
-    }
-
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-    {
-        eeprom_write(measure_wake, measure_wake);
-        eeprom_write(comms_wake, comms_wake);
-        eeprom_write(wake_secs, wake_secs);
-        eeprom_write(fridge_setpoint, fridge_setpoint);
-        eeprom_write(fridge_difference, fridge_difference);
-        eeprom_write(fridge_delay, fridge_delay);
-        eeprom_write(overshoot_delay, overshoot_delay);
-        eeprom_write(overshoot_factor, overshoot_factor);
-        magic = EXPECT_MAGIC;
-        eeprom_write(magic, magic);
-    }
-
-    return true;
+    uint16_t vcc = adc_vcc();
+    printf_P("vcc: %u mV\n", vcc);
 }
 
 static void
 read_handler()
 {
-    if (strcmp_P(readbuf, PSTR("fetch")) == 0)
-    {
-        cmd_fetch();
-    }
-    else if (strcmp_P(readbuf, PSTR("clear")) == 0)
-    {
-        cmd_clear();
-    }
-    else if (strcmp_P(readbuf, PSTR("btoff")) == 0)
-    {
-        cmd_btoff();
-    }
-    else if (strcmp_P(readbuf, PSTR("measure")) == 0)
-    {
-        cmd_measure();
-    }
-    else if (strcmp_P(readbuf, PSTR("sensors")) == 0)
-    {
-        cmd_sensors();
-    }
-    else if (strcmp_P(readbuf, PSTR("get_params")) == 0)
+    if (strcmp_P(readbuf, PSTR("get_params")) == 0)
     {
         cmd_get_params();
     }
@@ -435,29 +470,21 @@ read_handler()
     {
         cmd_set_params(&readbuf[11]);
     }
-    else if (strcmp_P(readbuf, PSTR("awake")) == 0)
+    else if (strncmp_P(readbuf, PSTR("set_key "), 8) == 0)
     {
-        cmd_awake();
+        cmd_set_avr_key(&readbuf[8]);
     }
-    else if (strncmp_P(readbuf, PSTR("fridge_setpoint "), 16) == 0)
+    else if (strncmp_P(readbuf, PSTR("oneshot "), 8) == 0)
     {
-        cmd_set_fridge_setpoint(&readbuf[16]);
+        cmd_oneshot_reboot(&readbuf[8]);
     }
-    else if (strncmp_P(readbuf, PSTR("fridge_diff "), 12) == 0)
+    else if (strncmp_P(readbuf, PSTR("hmac "), 5) == 0)
     {
-        cmd_set_fridge_difference(&readbuf[12]);
+        cmd_hmac(&readbuf[5]);
     }
-    else if (strncmp_P(readbuf, PSTR("fridge_delay "), 13) == 0)
+    else if (strcmp_P(readbuf, PSTR("vcc")) == 0)
     {
-        cmd_set_fridge_delay(&readbuf[13]);
-    }
-    else if (strncmp_P(readbuf, PSTR("overshoot_delay "), 16) == 0)
-    {
-        cmd_set_overshoot_delay(&readbuf[16]);
-    }
-    else if (strncmp_P(readbuf, PSTR("overshoot_factor "), 17) == 0)
-    {
-        cmd_set_overshoot_factor(&readbuf[17]);
+        cmd_vcc();
     }
     else if (strcmp_P(readbuf, PSTR("reset")) == 0)
     {
@@ -471,7 +498,6 @@ read_handler()
 
 ISR(INT0_vect)
 {
-    button_pressed = 1;
     blink();
     _delay_ms(100);
     blink();
@@ -504,15 +530,15 @@ ISR(USART_RX_vect)
     }
 }
 
-ISR(TIMER2_COMPA_vect)
+ISR(TIMER1_COMPA_vect)
 {
-    TCNT2 = 0;
+    TCNT1 = 0;
 
     clock_epoch += TICK;
 
     // watchdogs count up, continuous
     if (watchdog_long_limit > 0) {
-        watchdog_count += TICK;
+        watchdog_long_count += TICK;
         if (watchdog_long_count >= watchdog_long_limit)
         {
             watchdog_long_count = 0;
@@ -521,7 +547,7 @@ ISR(TIMER2_COMPA_vect)
     }
 
     if (watchdog_short_limit > 0) {
-        watchdog_count += TICK;
+        watchdog_short_count += TICK;
         if (watchdog_short_count >= watchdog_short_limit)
         {
             watchdog_short_count = 0;
@@ -529,27 +555,28 @@ ISR(TIMER2_COMPA_vect)
         }
     }
 
-    // newboot counts down, oneshot.
+    // newboot counts down
     if (newboot_count > 0)
     {
-        newboot_count--;
-        if (newboot_count == 0)
+        newboot_count-=TICK;
+        if (newboot_count <= 0)
         {
             newboot_hit = 1;
+            newboot_count = 0;
         }
     }
 
-}
+    if (oneshot_count > 0)
+    {
+        oneshot_count-=TICK;
+        if (oneshot_count <= 0)
+        {
+            oneshot_hit = 1;
+            oneshot_count = 0;
+        }
+    }
 
-static void
-deep_sleep()
-{
-    // p119 of manual
-    OCR2A = SLEEP_COMPARE;
-    loop_until_bit_is_clear(ASSR, OCR2AUB);
 
-    set_sleep_mode(SLEEP_MODE_PWR_SAVE);
-    sleep_mode();
 }
 
 static void
@@ -596,6 +623,53 @@ adc_vcc()
 }
 
 static void
+reboot_pi()
+{
+    // pull it low for 30ms
+    PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
+    DDR_PI_RESET |= _BV(PIN_PI_RESET);
+    _delay_ms(30);
+    DDR_PI_RESET &= ~_BV(PIN_PI_RESET);
+}
+
+static void
+set_pi_boot_normal(uint8_t normal) 
+{
+    PORT_PI_BOOT &= ~_BV(PIN_PI_BOOT);
+    if (normal) 
+    {
+        // tristate
+        DDR_PI_BOOT &= ~_BV(PIN_PI_BOOT);
+    }
+    else
+    {
+        // pull it low
+        DDR_PI_RESET |= _BV(PIN_PI_BOOT);
+
+    }
+}
+
+static void
+check_flags()
+{
+    if (watchdog_long_hit 
+        || watchdog_short_hit
+        || oneshot_hit)
+    {
+        reboot_pi();
+    }
+
+    if (newboot_hit) {
+        set_pi_boot_normal(0);
+    }
+
+    watchdog_long_hit = 0;
+    watchdog_short_hit = 0;
+    newboot_hit = 0;
+    oneshot_hit = 0;
+}
+
+static void
 do_comms()
 {
     // avoid receiving rubbish, perhaps
@@ -606,6 +680,9 @@ do_comms()
     while (1)
     {
         wdt_reset();
+
+        check_flags();
+
         if (have_cmd)
         {
             have_cmd = 0;
@@ -652,6 +729,8 @@ int main(void)
     uart_on();
 
     printf(PSTR("Started.\n"));
+
+    set_pi_boot_normal(0);
 
     load_params();
 
