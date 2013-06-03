@@ -13,14 +13,8 @@
 #include <util/atomic.h>
 #include <util/crc16.h>
 
-#include "simple_ds18b20.h"
-#include "onewire.h"
-
-// configuration params
-// - measurement interval
-// - transmit interval
-// - bluetooth params
-// - number of sensors (and range?)
+//#include "simple_ds18b20.h"
+//#include "onewire.h"
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
@@ -28,9 +22,11 @@
 // TICK should be 8 or less (8 untested). all timers need
 // to be a multiple.
 
-#define TICK 6
+#define TICK 1
 // we have 1024 prescaler, 32768 crystal.
 #define SLEEP_COMPARE (32*TICK-1)
+
+#define KEYLEN 20
 
 #define VALUE_NOSENSOR 0x07D0 // 125 degrees
 #define VALUE_BROKEN 0x07D1 // 125.0625
@@ -77,61 +73,34 @@ struct epoch_ticks
     uint8_t rem;
 };
 
-// eeprom-settable parameters. all timeouts should
-// be a multiple of TICK (6 seconds probably)
-static uint16_t measure_wake = 61; // not a divisor of comms_wake
-static uint16_t comms_wake = 600;
-static uint8_t wake_secs = 30;
-// decidegrees
-static int16_t fridge_setpoint = 180; // 18.0ºC
-static uint16_t fridge_difference = 3; // 0.3ºC
-static uint16_t fridge_delay = 600; // seconds
+// eeprom-settable parameters, default values defined here. 
+// all timeouts should be a multiple of TICK
+static uint32_t watchdog_long_limit = 60*60*24;
+static uint32_t watchdog_short_limit = 0;
+static uint32_t newboot_limit = 60*10;
 
-static uint16_t overshoot_delay = 720; // 12 mins
-static uint8_t overshoot_factor = 10; // 1.0ºC
+// avr proves itself
+static uint8_t avr_keys[NKEYS][KEYLEN] = {0};
+
 
 // ---- Atomic guards required accessing these variables
 // clock_epoch in seconds
 static uint32_t clock_epoch;
-static uint16_t comms_count;
-static uint16_t measure_count;
+// watchdog counts up
+static uint32_t watchdog_long_count;
+static uint32_t watchdog_short_count;
+// newboot counts down - it's a one-shot
+static uint32_t newboot_count;
 // ---- End atomic guards required
 
-static uint16_t n_measurements;
-
-// calculated at startup as TOTAL_MEASUREMENTS/n_sensors
-static uint16_t max_measurements;
-
-static uint16_t measurements[TOTAL_MEASUREMENTS];
-
-static struct epoch_ticks first_measurement_clock;
-// last_measurement_clock is redundant but checks that we're not missing
-// samples
-static struct epoch_ticks last_measurement_clock;
-static struct epoch_ticks last_comms_clock;
-
 // boolean flags
-static uint8_t need_measurement;
-static uint8_t need_comms;
-static uint8_t uart_enabled;
-static uint8_t stay_awake;
-static uint8_t button_pressed;
-
-// counts down from WAKE_SECS to 0, goes to deep sleep when hits 0
-static uint8_t comms_timeout;
+static uint8_t watchdog_long_hit;
+static uint8_t watchdog_short_hit;
+static uint8_t newboot_hit;
 
 static uint8_t readpos;
-static char readbuf[30];
+static char readbuf[50];
 static uint8_t have_cmd;
-
-static uint8_t n_sensors;
-static uint8_t sensor_id[MAX_SENSORS][ID_LEN];
-
-static int16_t last_fridge = DS18X20_INVALID_DECICELSIUS;
-static int16_t last_wort = DS18X20_INVALID_DECICELSIUS;
-static struct epoch_ticks fridge_off_clock = {0};
-static struct epoch_ticks fridge_on_clock = {0};
-static struct epoch_ticks wort_valid_clock = {0};
 
 int uart_putchar(char c, FILE *stream);
 static void long_delay(int ms);
@@ -141,61 +110,25 @@ static uint16_t adc_vcc();
 static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
         _FDEV_SETUP_WRITE);
 
-static uint16_t crc_out;
-static FILE _crc_stdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
-        _FDEV_SETUP_WRITE);
-// convenience
-static FILE *crc_stdout = &_crc_stdout;
-
-
 // thanks to http://projectgus.com/2010/07/eeprom-access-with-arduino/
 #define eeprom_read_to(dst_p, eeprom_field, dst_size) eeprom_read_block((dst_p), (void *)offsetof(struct __eeprom_data, eeprom_field), (dst_size))
 #define eeprom_read(dst, eeprom_field) eeprom_read_to((&dst), eeprom_field, sizeof(dst))
 #define eeprom_write_from(src_p, eeprom_field, src_size) eeprom_write_block((src_p), (void *)offsetof(struct __eeprom_data, eeprom_field), (src_size))
 #define eeprom_write(src, eeprom_field) { eeprom_write_from(&src, eeprom_field, sizeof(src)); }
 
-#define EXPECT_MAGIC 0x67c9
+#define EXPECT_MAGIC 0xdf83
 
 struct __attribute__ ((__packed__)) __eeprom_data {
-    uint16_t measure_wake;
-    uint16_t comms_wake;
-    uint8_t wake_secs;
+    uint32_t watchdog_long_limit;
+    uint32_t watchdog_short_limit;
+    uint32_t newboot_limit;
 
-    int16_t fridge_setpoint; // decidegrees
-    uint16_t fridge_difference; // decidegrees
-    uint16_t fridge_delay;
-
-    uint16_t overshoot_delay;
-    uint8_t overshoot_factor; // decidegrees
-
-#if 0
-    static uint8_t wort_id[ID_LEN];
-    static uint8_t fridge_id[ID_LEN];
-#endif
+    uint8_t avr_key[NKEYS][KEYLEN];
 
     uint16_t magic;
 };
 
-static const uint8_t fridge_id[ID_LEN] = 
-    {0x28,0xCE,0xB2,0x1A,0x03,0x00,0x00,0x99};
-static const uint8_t wort_id[ID_LEN] = 
-    {0x28,0x49,0xBC,0x1A,0x03,0x00,0x00,0x54};
-
 static void deep_sleep();
-
-// 0 or 1
-static uint8_t
-is_fridge_on()
-{
-    if (PORT_FRIDGE & _BV(PIN_FRIDGE))
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
 
 // Very first setup
 static void
@@ -209,22 +142,22 @@ setup_chip()
     WDTCSR |= _BV(WDCE) | _BV(WDE);
     WDTCSR = 0;
 
+    // set to 8S, in case sha1 is slow etc.
+    wdt_enable(WDTO_8S);
+
     // Set clock to 2mhz
     CLKPR = _BV(CLKPCE);
     // divide by 4
     CLKPR = _BV(CLKPS1);
 
     // enable pullups
+    // XXX matt pihelp
     PORTB = 0xff; // XXX change when using SPI
     PORTD = 0xff;
     PORTC = 0xff;
 
     // 3.3v power for bluetooth and SD
     DDR_LED |= _BV(PIN_LED);
-    DDR_SHDN |= _BV(PIN_SHDN);
-
-    PORT_FRIDGE &= ~_BV(PIN_FRIDGE);
-    DDR_FRIDGE |= _BV(PIN_FRIDGE);
 
     // set pullup
     PORTD |= _BV(PD2);
@@ -243,19 +176,6 @@ setup_chip()
 }
 
 static void
-set_aux_power(uint8_t on)
-{
-    if (on)
-    {
-        PORT_SHDN &= ~_BV(PIN_SHDN);
-    }
-    else
-    {
-        PORT_SHDN |= _BV(PIN_SHDN);
-    }
-}
-
-static void
 get_epoch_ticks(struct epoch_ticks *t)
 {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
@@ -263,18 +183,6 @@ get_epoch_ticks(struct epoch_ticks *t)
         t->ticks = clock_epoch;
         t->rem = TCNT2;
     }
-}
-
-static void 
-set_measurement(uint8_t sensor, uint16_t measurement, uint16_t reading)
-{
-    measurements[sensor*max_measurements + measurement] = reading;
-}
-
-static uint16_t 
-get_measurement(uint8_t sensor, uint16_t measurement)
-{
-    return measurements[sensor*max_measurements + measurement];
 }
 
 static void
@@ -357,90 +265,6 @@ uart_putchar(char c, FILE *stream)
 }
 
 static void
-cmd_fetch()
-{
-    crc_out = 0;
-
-    fprintf_P(crc_stdout, PSTR("START\n"));
-    {
-        struct epoch_ticks now;
-        get_epoch_ticks(&now);
-        fprintf_P(crc_stdout, PSTR("now=%lu\n"), now.ticks);
-        fprintf_P(crc_stdout, PSTR("now_rem=%hhu\n"), now.rem);
-    }
-    fprintf_P(crc_stdout, PSTR("time_step=%hu\n"), measure_wake);
-    fprintf_P(crc_stdout, PSTR("first_time=%lu\n"), first_measurement_clock.ticks);
-    fprintf_P(crc_stdout, PSTR("first_time_rem=%hhu\n"), first_measurement_clock.rem);
-    fprintf_P(crc_stdout, PSTR("last_time=%lu\n"),  last_measurement_clock.ticks);
-    fprintf_P(crc_stdout, PSTR("last_time_rem=%hhu\n"),  last_measurement_clock.rem);
-    fprintf_P(crc_stdout, PSTR("comms_time=%lu\n"), last_comms_clock.ticks);
-    fprintf_P(crc_stdout, PSTR("comms_time_rem=%hhu\n"), last_comms_clock.rem);
-    fprintf_P(crc_stdout, PSTR("voltage=%hu\n"), adc_vcc());
-    fprintf_P(crc_stdout, PSTR("measure=%hu\n"), measure_wake);
-    fprintf_P(crc_stdout, PSTR("comms=%hu\n"), comms_wake);
-    fprintf_P(crc_stdout, PSTR("wake=%hhu\n"), wake_secs);
-    fprintf_P(crc_stdout, PSTR("fridge=%.1f\n"), fridge_setpoint/10.0);
-    fprintf_P(crc_stdout, PSTR("fridge_diff=%.1f\n"), fridge_difference/10.0);
-    fprintf_P(crc_stdout, PSTR("fridge_delay=%hu\n"), fridge_delay);
-    fprintf_P(crc_stdout, PSTR("overshoot_factor=%.1f\n"), overshoot_factor/10.0);
-    fprintf_P(crc_stdout, PSTR("overshoot_delay=%hu\n"), overshoot_delay);
-    fprintf_P(crc_stdout, PSTR("fridge_status=%hhu\n"), is_fridge_on());
-    fprintf_P(crc_stdout, PSTR("fridge_last_on=%lu\n"), fridge_on_clock.ticks);
-    fprintf_P(crc_stdout, PSTR("fridge_last_off=%lu\n"), fridge_off_clock.ticks);
-    fprintf_P(crc_stdout, PSTR("last_fridge=%hu\n"), last_fridge);
-    fprintf_P(crc_stdout, PSTR("last_wort=%hu\n"), last_wort);
-    fprintf_P(crc_stdout, PSTR("tick_secs=%d\n"), TICK);
-    fprintf_P(crc_stdout, PSTR("tick_wake=%d\n"), SLEEP_COMPARE);
-    fprintf_P(crc_stdout, PSTR("maxsens=%hhu\n"), MAX_SENSORS);
-    fprintf_P(crc_stdout, PSTR("totalmeas=%hu\n"), TOTAL_MEASUREMENTS);
-    fprintf_P(crc_stdout, PSTR("sensors=%hhu\n"), n_sensors);
-    for (uint8_t s = 0; s < n_sensors; s++)
-    {
-        fprintf_P(crc_stdout, PSTR("sensor_id%hhu="), s);
-        printhex(sensor_id[s], ID_LEN, crc_stdout);
-        fputc('\n', crc_stdout);
-    }
-    fprintf_P(crc_stdout, PSTR("measurements=%hu\n"), n_measurements);
-    for (uint16_t n = 0; n < n_measurements; n++)
-    {
-        fprintf_P(crc_stdout, PSTR("meas%hu="), n);
-        for (uint8_t s = 0; s < n_sensors; s++)
-        {
-            fprintf_P(crc_stdout, PSTR(" %04hx"), get_measurement(s, n));
-        }
-        fputc('\n', crc_stdout);
-    }
-    fprintf_P(crc_stdout, PSTR("END\n"));
-    fprintf_P(stdout, PSTR("CRC=%hu\n"), crc_out);
-}
-
-static void
-cmd_clear()
-{
-    n_measurements = 0;
-    printf_P(PSTR("cleared\n"));
-}
-
-static void
-cmd_btoff()
-{
-    uint8_t rem;
-    uint16_t count_copy;
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-    {
-        count_copy = comms_count;
-        rem = TCNT2;
-    }
-    printf_P(PSTR("next_wake=%hu,"), comms_wake-count_copy);
-    printf_P(PSTR("rem=%hhu,"), rem);
-    printf_P(PSTR("tick_secs=%hhu,"), TICK);
-    printf_P(PSTR("tick_wake=%hhu\n"), SLEEP_COMPARE);
-    _delay_ms(100);
-    comms_timeout = 0;
-    stay_awake = 0;
-}
-
-static void
 cmd_reset()
 {
     printf_P(PSTR("reset\n"));
@@ -450,102 +274,40 @@ cmd_reset()
     while(1); // wait for watchdog to reset processor 
 }
 
-static void
-cmd_measure()
-{
-    printf_P(PSTR("measuring\n"));
-    need_measurement = 1;
-}
 
-static void
-cmd_sensors()
-{
-    uint8_t ret = simple_ds18b20_start_meas(NULL);
-    printf_P(PSTR("All sensors, ret %hhu, waiting...\n"), ret);
-    long_delay(DS18B20_TCONV_12BIT);
-    simple_ds18b20_read_all();
-}
-
-static void
-init_sensors()
-{
-    uint8_t id[OW_ROMCODE_SIZE];
-    printf_P(PSTR("init sensors\n"));
-    ow_reset();
-    for( uint8_t diff = OW_SEARCH_FIRST; diff != OW_LAST_DEVICE; )
-    {
-        diff = ow_rom_search( diff, &id[0] );
-        if( diff == OW_PRESENCE_ERR ) {
-            printf_P( PSTR("No Sensor found\r") );
-            return;
-        }
-        
-        if( diff == OW_DATA_ERR ) {
-            printf_P( PSTR("Bus Error\r") );
-            return;
-        }
-
-        if (n_sensors < MAX_SENSORS)
-        {
-            memcpy(sensor_id[n_sensors], id, ID_LEN);
-            printf_P(PSTR("Added sensor %hhu : "), n_sensors);
-            printhex(id, ID_LEN, stdout);
-            putchar('\n');
-            n_sensors++;
-        }
-        else
-        {
-            printf_P(PSTR("Too many sensors\n"));
-        }
-    }
-
-    max_measurements = TOTAL_MEASUREMENTS / n_sensors;
-}
-
-static void
-load_params()
-{
-    uint16_t magic;
-    eeprom_read(magic, magic);
-    if (magic == EXPECT_MAGIC)
-    {
-        eeprom_read(measure_wake, measure_wake);
-        eeprom_read(comms_wake, comms_wake);
-        eeprom_read(wake_secs, wake_secs);
-        eeprom_read(fridge_setpoint, fridge_setpoint);
-        eeprom_read(fridge_difference, fridge_difference);
-        eeprom_read(fridge_delay, fridge_delay);
-        eeprom_read(overshoot_delay, overshoot_delay);
-        eeprom_read(overshoot_factor, overshoot_factor);
-    }
-}
 
 static void
 cmd_get_params()
 {
-    printf_P(PSTR("measure %hu\n"), measure_wake);
-    printf_P(PSTR("comms %hu\n"), comms_wake);
-    printf_P(PSTR("wake %hhu\n"), wake_secs);
-    printf_P(PSTR("tick %d\n"), TICK);
-    printf_P(PSTR("fridge %.1fº\n"), fridge_setpoint / 10.0f);
-    printf_P(PSTR("fridge difference %.1fº\n"), fridge_difference / 10.0f);
-    printf_P(PSTR("fridge_delay %hu\n"), fridge_delay);
-    printf_P(PSTR("overshoot factor %.1fº\n"), overshoot_factor / 10.0f);
-    printf_P(PSTR("overshoot delay %hu\n"), overshoot_delay);
-    printf_P(PSTR("sensors %hhu (%hhu)\n"), 
-            n_sensors, MAX_SENSORS);
-    printf_P(PSTR("meas %hu (%hu)\n"),
-            max_measurements, TOTAL_MEASUREMENTS);
+    uint32_t cur_watchdog_long, cur_watchdog_short, cur_newboot;
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        cur_watchdog_long = watchdot_long_count;
+        cur_watchdog_short = watchdot_short_count;
+        cur_newboot = newboot_limit_count;
+    }
+
+    printf_P(PSTR("limit (count) : watchdog_long %lu (%lu) watchdog_short %lu (%lu) newboot %lu (%lu)\n"),
+        watchdog_long_limit,
+        watchdog_long_count,
+        watchdog_short_limit,
+        watchdog_short_count,
+        newboot_limit,
+        newboot_count);
 }
 
 static void
 cmd_set_params(const char *params)
 {
-    uint16_t new_measure_wake;
-    uint16_t new_comms_wake;
-    uint8_t new_wake_secs;
-    int ret = sscanf_P(params, PSTR("%hu %hu %hhu"),
-            &new_measure_wake, &new_comms_wake, &new_wake_secs);
+    uint32_t new_watchdog_long_limit;
+    uint32_t new_watchdog_short_limit;
+    uint32_t new_newboot_limit;
+
+    int ret = sscanf_P(params, PSTR("%lu %lu %lu"),
+            &new_watchdog_long_limit,
+            &new_watchdog_short_limit,
+            &new_newboot_limit);
+
 
     if (ret != 3)
     {
@@ -555,16 +317,63 @@ cmd_set_params(const char *params)
     {
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
         {
-            eeprom_write(new_measure_wake, measure_wake);
-            eeprom_write(new_comms_wake, comms_wake);
-            eeprom_write(new_wake_secs, wake_secs);
+            eeprom_write(new_watchdog_long_limit, watchdog_long_limit);
+            eeprom_write(new_watchdog_short_limit, watchdog_short_limit);
+            eeprom_write(new_newboot_limit, newboot_limit);
             uint16_t magic = EXPECT_MAGIC;
             eeprom_write(magic, magic);
         }
         printf_P(PSTR("set_params for next boot\n"));
-        printf_P(PSTR("measure %hu comms %hu wake %hhu\n"),
-                new_measure_wake, new_comms_wake, new_wake_secs);
+        printf_P(PSTR("watchdog_long %lu watchdog_short %lu newboot %lu\n"),
+            new_watchdog_long_limit,
+            new_watchdog_short_limit,
+            new_newboot_limit);
+
     }
+}
+
+uint8_t from_hex(char c)
+{
+    if (c >= '0' && c <= '9') {
+        return c-'0';
+    }
+    if (c >= 'a' && c <= 'f') {
+        return c-'a' + 0xa;
+    }
+    if (c >= 'A' && c <= 'F') {
+        return c-'A' + 0xa;
+    }
+    return 0;
+}
+
+static void
+cmd_set_avr_key(const char *params)
+{
+    // "N HEXKEY"
+    if (strlen(params)) != KEYLEN*2+2) {
+        printf_P(PSTR("Wrong length key\n"));
+        return;
+    }
+
+    uint8_t new_key[KEYLEN];
+    for (int i = 0, p = 0; i < KEYLEN; i++, p += 2)
+    {
+        new_key[i] = (fromhex(params[p]) << 4) | fromhex(params[p+1]);
+    }
+}
+
+static void
+load_params()
+{
+    uint16_t magic;
+    eeprom_read(magic, magic);
+    if (magic == EXPECT_MAGIC)
+    {
+        eeprom_read(watchdog_long_limit, watchdog_long_limit);
+        eeprom_read(watchdog_short_limit, watchdog_short_limit);
+        eeprom_read(netboot_limit);
+        eeprom_read(avr_key);
+   }
 }
 
 // returns true if eeprom was written
@@ -593,135 +402,6 @@ set_initial_eeprom()
     }
 
     return true;
-}
-
-static void
-cmd_set_fridge_setpoint(char *params)
-{
-    float new_f = atof(params);
-    if (new_f < 2 || new_f > 30)
-    {
-        printf_P(PSTR("Bad fridge value %f\n"), new_f);
-        return;
-    }
-
-    int16_t old_setpoint = fridge_setpoint;
-
-    fridge_setpoint = new_f * 10;
-    bool written = set_initial_eeprom();
-    if (!written)
-    {
-        if (old_setpoint != fridge_setpoint)
-        {
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-            {
-                eeprom_write(fridge_setpoint, fridge_setpoint);
-            }
-        }
-    }
-    printf_P(PSTR("old fridge %.1fº new fridge %.1fº\n"), 
-            old_setpoint / 10.0f, fridge_setpoint / 10.0f);
-}
-
-static void
-cmd_set_fridge_difference(char *params)
-{
-    float new_f = atof(params);
-    if (new_f < 0 || new_f > 30)
-    {
-        printf_P(PSTR("Bad fridge value %f\n"), new_f);
-        return;
-    }
-
-    fridge_difference = new_f * 10;
-    bool written = set_initial_eeprom();
-    if (!written)
-    {
-        ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-        {
-            eeprom_write(fridge_difference, fridge_difference);
-        }
-    }
-    printf_P(PSTR("new fridge difference %.1fº\n"), fridge_difference / 10.0f);
-}
-
-static void
-cmd_set_fridge_delay(char *params)
-{
-    uint16_t new_delay = atoi(params);
-    if (new_delay < 5)
-    {
-        printf_P(PSTR("Bad fridge delay %d\n"), new_delay);
-        return;
-    }
-
-    fridge_delay = new_delay;
-    bool written = set_initial_eeprom();
-    if (!written)
-    {
-        ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-        {
-            eeprom_write(fridge_delay, fridge_delay);
-        }
-    }
-    printf_P(PSTR("new fridge delay %hu\n"), fridge_delay);
-}
-
-static void
-cmd_set_overshoot_factor(char *params)
-{
-    float new_f = atof(params);
-    if (new_f <= 0 || new_f > 20)
-    {
-        printf_P(PSTR("Bad overshoot factor %f\n"), new_f);
-        return;
-    }
-
-    uint8_t old = overshoot_factor;
-
-    overshoot_factor = new_f * 10;
-    bool written = set_initial_eeprom();
-    if (!written)
-    {
-        if (old != overshoot_factor)
-        {
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-            {
-                eeprom_write(overshoot_factor, overshoot_factor);
-            }
-        }
-    }
-    printf_P(PSTR("old factor %.1fº new factor %.1fº\n"), 
-            old / 10.0f, overshoot_factor / 10.0f);
-}
-    
-static void
-cmd_set_overshoot_delay(char *params)
-{
-    uint16_t new_delay = atoi(params);
-    if (new_delay < 5)
-    {
-        printf_P(PSTR("Bad overshoot delay %d\n"), new_delay);
-        return;
-    }
-
-    overshoot_delay = new_delay;
-    bool written = set_initial_eeprom();
-    if (!written)
-    {
-        ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-        {
-            eeprom_write(overshoot_delay, overshoot_delay);
-        }
-    }
-    printf_P(PSTR("new overshoot delay %hu\n"), overshoot_delay);
-}
-
-static void
-cmd_awake()
-{
-    stay_awake = 1;
-    printf_P(PSTR("awake\n"));
 }
 
 static void
@@ -827,27 +507,38 @@ ISR(USART_RX_vect)
 ISR(TIMER2_COMPA_vect)
 {
     TCNT2 = 0;
-    measure_count += TICK;
-    comms_count += TICK;
 
     clock_epoch += TICK;
 
-    if (comms_timeout != 0)
-    {
-        comms_timeout -= TICK;
+    // watchdogs count up, continuous
+    if (watchdog_long_limit > 0) {
+        watchdog_count += TICK;
+        if (watchdog_long_count >= watchdog_long_limit)
+        {
+            watchdog_long_count = 0;
+            watchdog_long_hit = 1;
+        }
     }
 
-    if (measure_count >= measure_wake)
-    {
-        measure_count = 0;
-        need_measurement = 1;
+    if (watchdog_short_limit > 0) {
+        watchdog_count += TICK;
+        if (watchdog_short_count >= watchdog_short_limit)
+        {
+            watchdog_short_count = 0;
+            watchdog_short_hit = 1;
+        }
     }
 
-    if (comms_count >= comms_wake)
+    // newboot counts down, oneshot.
+    if (newboot_count > 0)
     {
-        comms_count = 0;
-        need_comms = 1;
+        newboot_count--;
+        if (newboot_count == 0)
+        {
+            newboot_hit = 1;
+        }
     }
+
 }
 
 static void
@@ -905,195 +596,16 @@ adc_vcc()
 }
 
 static void
-do_fridge()
-{
-    struct epoch_ticks now;
-    get_epoch_ticks(&now);
-    uint32_t off_time = now.ticks - fridge_off_clock.ticks;
-    bool wort_valid = last_wort != DS18X20_INVALID_DECICELSIUS;
-    bool fridge_valid = last_fridge != DS18X20_INVALID_DECICELSIUS;
-
-    int16_t wort_max = fridge_setpoint + fridge_difference;
-    int16_t wort_min = fridge_setpoint;
-
-    // the fridge min/max only apply if the wort sensor is broken
-    int16_t fridge_min = fridge_setpoint - FRIDGE_AIR_MIN_RANGE;
-    int16_t fridge_max = fridge_setpoint + FRIDGE_AIR_MAX_RANGE;
-
-    uint8_t fridge_on = PORT_FRIDGE & _BV(PIN_FRIDGE);
-    printf_P(PSTR("last_wort %hd (%hd, %hd), last_fridge %hd (%hd, %hd), setpoint %hd, diff %hd, fridge_on %hhu\n"), 
-            last_wort, wort_min, wort_max, 
-            last_fridge, fridge_min, fridge_max, 
-            fridge_setpoint, fridge_difference, fridge_on);
-
-    if (off_time < fridge_delay)
-    {
-        printf_P(PSTR("waiting for fridge delay current %hu, wait %hu\n"),
-                off_time, fridge_delay);
-        return;
-    }
-
-    // handle failure of the wort sensor. if it is a short (intermittent?)
-    // failure we wait until it has been broken for a period of time
-    // (WORT_INVALID_TIME) before doing anything.
-    if (wort_valid)
-    {
-        wort_valid_clock = now;
-    }
-    else
-    {
-        printf_P(PSTR("wort sensor is invalid\n"));
-        uint32_t invalid_time = now.ticks - wort_valid_clock.ticks;
-        if (invalid_time < WORT_INVALID_TIME)
-        {
-            printf("only been invalid for %ld, waiting\n", invalid_time);
-            return;
-        }
-    }
-
-    if (!fridge_valid)
-    {
-        printf_P(PSTR("fridge sensor is invalid\n"));
-    }
-
-    if (fridge_on)
-    {
-        bool turn_off = false;
-        uint16_t on_time = now.ticks - fridge_on_clock.ticks;
-
-        uint16_t overshoot = 0;
-        if (on_time > overshoot_delay)
-        {
-            overshoot = overshoot_factor * MIN(OVERSHOOT_MAX_DIV, on_time) / OVERSHOOT_MAX_DIV;
-        }
-
-        printf_P(PSTR("on_time %hu, overshoot %hu\n"), on_time, overshoot);
-
-        // wort has cooled enough. will probably cool a bit more by itself
-        if (wort_valid)
-        {
-            if ((last_wort - overshoot) < fridge_setpoint)
-            {
-                printf_P(PSTR("wort has cooled enough, overshoot %hu on_time %hu\n"), overshoot, on_time);
-                turn_off = true;
-            }
-        }
-        else
-        {
-            if (fridge_valid && last_fridge < fridge_min)
-            {
-                printf_P(PSTR("fridge off fallback\n"));
-                turn_off = true;
-            }
-        }
-
-        if (turn_off)
-        {
-            // too cold, turn off
-            printf_P(PSTR("Turning fridge off\n"));
-            PORT_FRIDGE &= ~_BV(PIN_FRIDGE);
-            fridge_off_clock = now;
-        }
-    }
-    else
-    {
-        bool turn_on = false;
-
-        if (wort_valid)
-        {
-            if (last_wort >= wort_max)
-            {
-                printf_P(PSTR("wort is too hot\n"));
-                turn_on = true;
-            }
-        }
-        else
-        {
-            if (fridge_valid && last_fridge >= fridge_max)
-            {
-                printf_P(PSTR("fridge on fallback\n"));
-                turn_on = true;
-            }
-        }
-
-        if (turn_on)
-        {
-            // too hot, turn on
-            printf_P(PSTR("Turning fridge on\n"));
-            PORT_FRIDGE |= _BV(PIN_FRIDGE);
-            fridge_on_clock = now;
-        }
-    }
-}
-
-static void
-do_measurement()
-{
-    blink();
-
-    /* Take the timer here since deep_sleep() below could take 6 seconds */
-    get_epoch_ticks(&last_measurement_clock);
-    if (n_measurements == 0)
-    {
-        first_measurement_clock = last_measurement_clock;
-    }
-
-    simple_ds18b20_start_meas(NULL);
-    _delay_ms(DS18B20_TCONV_12BIT);
-
-    if (n_measurements == max_measurements)
-    {
-        n_measurements = 0;
-    }
-
-    for (uint8_t s = 0; s < n_sensors; s++)
-    {
-        uint16_t reading;
-        uint8_t ret = simple_ds18b20_read_raw(sensor_id[s], &reading);
-        if (ret != DS18X20_OK)
-        {
-            reading = VALUE_BROKEN;
-        }
-        set_measurement(s, n_measurements, reading);
-
-        if (memcmp(sensor_id[s], fridge_id, sizeof(fridge_id)) == 0)
-        {
-            last_fridge = ds18b20_raw16_to_decicelsius(reading);
-        }
-        if (memcmp(sensor_id[s], wort_id, sizeof(wort_id)) == 0)
-        {
-            last_wort = ds18b20_raw16_to_decicelsius(reading);
-        }
-    }
-
-    n_measurements++;
-}
-
-static void
 do_comms()
 {
-    get_epoch_ticks(&last_comms_clock);
-
-    // turn on bluetooth
-    set_aux_power(1);
     // avoid receiving rubbish, perhaps
-    _delay_ms(50);
     uart_on();
     
     // write sd card here? same 3.3v regulator...
     
-    for (comms_timeout = wake_secs; 
-        comms_timeout > 0 || stay_awake;  
-        )
+    while (1)
     {
-        if (need_measurement)
-        {
-            need_measurement = 0;
-            do_measurement();
-            do_fridge();
-            continue;
-        }
-
+        wdt_reset();
         if (have_cmd)
         {
             have_cmd = 0;
@@ -1104,11 +616,6 @@ do_comms()
         // wait for commands from the master
         idle_sleep();
     }
-
-    uart_off();
-    // in case bluetooth takes time to flush
-    _delay_ms(100);
-    set_aux_power(0);
 }
 
 static void
@@ -1141,8 +648,6 @@ int main(void)
     setup_chip();
     blink();
 
-    set_aux_power(0);
-
     stdout = &mystdout;
     uart_on();
 
@@ -1150,51 +655,12 @@ int main(void)
 
     load_params();
 
-    init_sensors();
-
-    uart_off();
-
-    // turn off everything except timer2
-    PRR = _BV(PRTWI) | _BV(PRTIM0) | _BV(PRTIM1) | _BV(PRSPI) | _BV(PRUSART0) | _BV(PRADC);
-
     setup_tick_counter();
 
     sei();
 
-    need_comms = 1;
-    need_measurement = 1;
-
-    stay_awake = 1;
-
-    for(;;)
-    {
-        if (button_pressed)
-        {
-            // debounce
-            _delay_ms(200);
-            need_comms = 1;
-            comms_timeout = wake_secs;
-            button_pressed = 0;
-            continue;
-        }
-
-        if (need_comms)
-        {
-            need_comms = 0;
-            do_comms();
-            continue;
-        }
-
-        if (need_measurement)
-        {
-            need_measurement = 0;
-            do_measurement();
-            do_fridge();
-            continue;
-        }
-
-        deep_sleep();
-    }
+    // doesn't return
+    do_comms();
 
     return 0;   /* never reached */
 }

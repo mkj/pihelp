@@ -23,9 +23,9 @@ CLOCK      = 2000000
 PROGRAMMER = #-c stk500v2 -P avrdoper
 PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
-SOURCE_CRYPTO = sha1.c hmac-sha1.c sha1-asm.S
+SOURCE_CRYPTO = hmac-sha1.c sha1-asm.S
 SOURCE    = main.c
-SOURCE += $(SOURCE_1WIRE) $(SOURCE_CRYPTO)
+SOURCE += (SOURCE_CRYPTO)
 LIBS       = -lm
 
 # default but 2mhz
