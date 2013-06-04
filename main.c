@@ -35,7 +35,7 @@
 // XXX
 #define PORT_PI_BOOT PORTD
 #define DDR_PI_BOOT DDRD
-#define PIN_PI_BOOT PD7
+#define PIN_PI_BOOT PD5
 
 // XXX
 #define PORT_PI_RESET PORTD
@@ -43,9 +43,9 @@
 #define PIN_PI_RESET PD6
 
 
-#define PORT_LED PORTC
-#define DDR_LED DDRC
-#define PIN_LED PC4
+#define PORT_LED PORTD
+#define DDR_LED DDRD
+#define PIN_LED PD7
 
 // #define HAVE_UART_ECHO
 
@@ -490,6 +490,10 @@ read_handler()
     {
         cmd_reset();
     }
+    else if (strcmp_P(readbuf, PSTR("newboot")) == 0)
+    {
+        cmd_newboot();
+    }
     else
     {
         printf_P(PSTR("Bad command '%s'\n"), readbuf);
@@ -575,8 +579,6 @@ ISR(TIMER1_COMPA_vect)
             oneshot_count = 0;
         }
     }
-
-
 }
 
 static void
