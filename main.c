@@ -51,7 +51,7 @@ LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 
 // #define HAVE_UART_ECHO
 
-// stores a value of clock_epoch combined with the remainder of TCNT2,
+// stores a value of clock_epoch combined with the remainder of TCNT1,
 // for 1/32 second accuracy
 struct epoch_ticks
 {
@@ -171,7 +171,7 @@ get_epoch_ticks(struct epoch_ticks *t)
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {
         t->ticks = clock_epoch;
-        t->rem = TCNT2;
+        t->rem = TCNT1;
     }
 }
 
@@ -186,8 +186,8 @@ setup_tick_counter()
     //TCCR2A = _BV(COM2A1) | _BV(COM2A0) | _BV(WGM21);
     // toggle on match
     TCCR1A = _BV(COM1A0);
-    // systemclock/1024
-    TCCR1B = _BV(CS12) | _BV(CS10);
+    // systemclock/64
+    TCCR1B = _BV(CS11) | _BV(CS10);
     TCNT1 = 0;
     OCR1A = SLEEP_COMPARE;
     // interrupt
@@ -414,15 +414,16 @@ cmd_set_avr_key(const char *params)
 static void
 cmd_hmac(const char *params)
 {
-    uint8_t data[HMACLEN];
+    uint8_t indata[HMACLEN];
+    uint8_t outdata[HMACLEN];
     uint8_t key_index;
-    if (parse_key(params, &key_index, data, sizeof(data)) != 0)
+    if (parse_key(params, &key_index, indata, sizeof(indata)) != 0)
     {
         printf_P(PSTR("FAIL: Bad input\n"));
         return;
     }
 
-    if (key_index % 2 == 0)
+    if (key_index % 2 != 0)
     {
         printf_P(PSTR("Only hmac with even keys\n"));
         return;
@@ -430,13 +431,10 @@ cmd_hmac(const char *params)
 
     long_delay(200);
 
-    hmac_sha1_ctx_t ctx;
-    hmac_sha1_init(&ctx, avr_keys[key_index], KEYLEN);
-    hmac_sha1_lastBlock(&ctx, data, HMACLEN);
-    hmac_sha1_final(data, &ctx);
+    hmac_sha1(outdata, avr_keys[key_index], KEYLEN*8, indata, HMACLEN*8);
 
     printf_P(PSTR("HMAC: "));
-    printhex(data, HMACLEN, stdout);
+    printhex(outdata, HMACLEN, stdout);
     fputc('\n', stdout);
 }
 
@@ -452,7 +450,7 @@ cmd_decrypt(const char *params)
         return;
     }
 
-    if (key_index % 2)
+    if (key_index % 2 == 0)
     {
         printf_P(PSTR("Only decrypt with odd keys\n"));
         return;
@@ -460,11 +458,9 @@ cmd_decrypt(const char *params)
 
     long_delay(200);
 
+
     // check the signature
-    hmac_sha1_ctx_t ctx;
-    hmac_sha1_init(&ctx, avr_keys[key_index], KEYLEN);
-    hmac_sha1_lastBlock(&ctx, &data[HMACLEN], AESLEN);
-    hmac_sha1_final(output, &ctx);
+    hmac_sha1(output, avr_keys[key_index], KEYLEN*8, &data[HMACLEN], AESLEN*8);
 
     if (memcmp(output, data, HMACLEN) != 0) {
         printf_P(PSTR("FAIL: hmac mismatch\n"));
