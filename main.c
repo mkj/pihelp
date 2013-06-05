@@ -14,9 +14,12 @@
 #include <util/crc16.h>
 
 #include "hmac-sha1.h"
+#include "aes.h"
 
 //#include "simple_ds18b20.h"
 //#include "onewire.h"
+
+LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
@@ -26,22 +29,21 @@
 
 #define TICK 1
 #define SLEEP_COMPARE (2000000/64)   // == 31250 exactly
-#define NKEYS 6
-#define KEYLEN 20
+#define NKEYS 10
+#define HMACLEN 20
+#define AESLEN 16
+#define KEYLEN HMACLEN
 
 #define BAUD 19200
 #define UBRR ((F_CPU)/8/(BAUD)-1)
 
-// XXX
 #define PORT_PI_BOOT PORTD
 #define DDR_PI_BOOT DDRD
 #define PIN_PI_BOOT PD5
 
-// XXX
 #define PORT_PI_RESET PORTD
 #define DDR_PI_RESET DDRD
 #define PIN_PI_RESET PD6
-
 
 #define PORT_LED PORTD
 #define DDR_LED DDRD
@@ -138,18 +140,20 @@ setup_chip()
 
     // enable pullups
     // XXX matt pihelp
-    PORTB = 0xff; // XXX change when using SPI
-    PORTD = 0xff;
-    PORTC = 0xff;
+    //PORTB = 0xff; // XXX change when using SPI
+    //PORTD = 0xff;
+    //PORTC = 0xff;
 
     // 3.3v power for bluetooth and SD
     DDR_LED |= _BV(PIN_LED);
 
+#if 0
     // set pullup
     PORTD |= _BV(PD2);
     // INT0 setup
     EICRA = (1<<ISC01); // falling edge - data sheet says it won't work?
     EIMSK = _BV(INT0);
+#endif
 
     // comparator disable
     ACSR = _BV(ACD);
@@ -365,10 +369,11 @@ printhex(uint8_t *id, uint8_t n, FILE *stream)
 }
 
 static int8_t
-parse_key(const char *params, uint8_t *key_index, uint8_t bytes[KEYLEN])
+parse_key(const char *params, uint8_t *key_index, uint8_t *bytes,
+    uint8_t bytes_len)
 {
     // "N HEXKEY"
-    if (strlen(params) != KEYLEN*2+2) {
+    if (strlen(params) != bytes_len*2 + 2) {
         printf_P(PSTR("Wrong length key\n"));
         return -1;
     }
@@ -386,7 +391,7 @@ parse_key(const char *params, uint8_t *key_index, uint8_t bytes[KEYLEN])
         return -1;
     }
 
-    for (int i = 0, p = 0; i < KEYLEN; i++, p += 2)
+    for (int i = 0, p = 0; i < bytes_len; i++, p += 2)
     {
         bytes[i] = (from_hex(params[p+2]) << 4) | from_hex(params[p+3]);
     }
@@ -398,7 +403,7 @@ cmd_set_avr_key(const char *params)
 {
     uint8_t new_key[KEYLEN];
     uint8_t key_index;
-    if (parse_key(params, &key_index, new_key) != 0)
+    if (parse_key(params, &key_index, new_key, sizeof(new_key)) != 0)
     {
         return;
     }
@@ -409,20 +414,68 @@ cmd_set_avr_key(const char *params)
 static void
 cmd_hmac(const char *params)
 {
-    uint8_t data[KEYLEN];
+    uint8_t data[HMACLEN];
     uint8_t key_index;
-    if (parse_key(params, &key_index, data) != 0)
+    if (parse_key(params, &key_index, data, sizeof(data)) != 0)
     {
         printf_P(PSTR("FAIL: Bad input\n"));
+        return;
     }
+
+    if (key_index % 2 == 0)
+    {
+        printf_P(PSTR("Only hmac with even keys\n"));
+        return;
+    }
+
+    long_delay(200);
 
     hmac_sha1_ctx_t ctx;
     hmac_sha1_init(&ctx, avr_keys[key_index], KEYLEN);
-    hmac_sha1_lastBlock(&ctx, data, KEYLEN);
+    hmac_sha1_lastBlock(&ctx, data, HMACLEN);
     hmac_sha1_final(data, &ctx);
 
     printf_P(PSTR("HMAC: "));
-    printhex(data, KEYLEN, stdout);
+    printhex(data, HMACLEN, stdout);
+    fputc('\n', stdout);
+}
+
+static void
+cmd_decrypt(const char *params)
+{
+    uint8_t data[HMACLEN+AESLEN];
+    uint8_t output[HMACLEN];
+    uint8_t key_index;
+    if (parse_key(params, &key_index, data, sizeof(data)) != 0)
+    {
+        printf_P(PSTR("FAIL: Bad input\n"));
+        return;
+    }
+
+    if (key_index % 2)
+    {
+        printf_P(PSTR("Only decrypt with odd keys\n"));
+        return;
+    }
+
+    long_delay(200);
+
+    // check the signature
+    hmac_sha1_ctx_t ctx;
+    hmac_sha1_init(&ctx, avr_keys[key_index], KEYLEN);
+    hmac_sha1_lastBlock(&ctx, &data[HMACLEN], AESLEN);
+    hmac_sha1_final(output, &ctx);
+
+    if (memcmp(output, data, HMACLEN) != 0) {
+        printf_P(PSTR("FAIL: hmac mismatch\n"));
+    }
+
+    uint8_t expkey[AES_EXPKEY_SIZE];
+    ExpandKey(avr_keys[key_index], expkey);
+    Decrypt(&data[HMACLEN], expkey, output);
+
+    printf_P(PSTR("DECRYPTED: "));
+    printhex(output, AESLEN, stdout);
     fputc('\n', stdout);
 }
 
@@ -482,6 +535,10 @@ read_handler()
     {
         cmd_hmac(&readbuf[5]);
     }
+    else if (strncmp_P(readbuf, PSTR("decrypt "), 8) == 0)
+    {
+        cmd_hmac(&readbuf[8]);
+    }
     else if (strcmp_P(readbuf, PSTR("vcc")) == 0)
     {
         cmd_vcc();
@@ -506,7 +563,6 @@ ISR(INT0_vect)
     _delay_ms(100);
     blink();
 }
-
 
 ISR(USART_RX_vect)
 {
@@ -730,7 +786,7 @@ int main(void)
     stdout = &mystdout;
     uart_on();
 
-    printf(PSTR("Started.\n"));
+    printf(PSTR("Pi Watchdog\nMatt Johnston matt@ucc.asn.au"));
 
     set_pi_boot_normal(0);
 

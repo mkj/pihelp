@@ -413,6 +413,8 @@ unsigned round;
 }
 
 
+#if 0
+
 /*avr specific routines*/
 #include "backward.h"
 #include <avr/io.h>
@@ -533,3 +535,5 @@ char c[8];
 	printP(PSTR("\n"));
 }
 
+
+#endif
