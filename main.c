@@ -186,8 +186,13 @@ setup_tick_counter()
     //TCCR2A = _BV(COM2A1) | _BV(COM2A0) | _BV(WGM21);
     // toggle on match
     TCCR1A = _BV(COM1A0);
+#ifdef SIM_DEBUG
+    // systemclock/8
+    TCCR1B = _BV(CS11);
+#else
     // systemclock/64
     TCCR1B = _BV(CS11) | _BV(CS10);
+#endif
     TCNT1 = 0;
     OCR1A = SLEEP_COMPARE;
     // interrupt
@@ -408,7 +413,9 @@ cmd_set_avr_key(const char *params)
         return;
     }
     memcpy(avr_keys[key_index], new_key, sizeof(new_key));
+#ifndef SIM_DEBUG
     eeprom_write(avr_keys, avr_keys);
+#endif
 }
 
 static void
@@ -429,7 +436,9 @@ cmd_hmac(const char *params)
         return;
     }
 
+#ifndef SIM_DEBUG
     long_delay(200);
+#endif
 
     hmac_sha1(outdata, avr_keys[key_index], KEYLEN*8, indata, HMACLEN*8);
 
@@ -456,11 +465,12 @@ cmd_decrypt(const char *params)
         return;
     }
 
+#ifndef SIM_DEBUG
     long_delay(200);
-
+#endif
 
     // check the signature
-    hmac_sha1(output, avr_keys[key_index], KEYLEN*8, &data[HMACLEN], AESLEN*8);
+    hmac_sha1(output, avr_keys[key_index+1], KEYLEN*8, &data[HMACLEN], AESLEN*8);
 
     if (memcmp(output, data, HMACLEN) != 0) {
         printf_P(PSTR("FAIL: hmac mismatch\n"));
@@ -791,6 +801,13 @@ int main(void)
     setup_tick_counter();
 
     sei();
+
+#if 0
+    // encryption test
+    cmd_set_avr_key("1 6161626263636464656566666767686800000000");
+    cmd_set_avr_key("2 7979757569696f6f646465656666717164646969");
+    cmd_decrypt("1 ecd858ee07a8e16575723513d2d072a7565865e40ba302059bfc650d4491268448102119");
+#endif
 
     // doesn't return
     do_comms();
