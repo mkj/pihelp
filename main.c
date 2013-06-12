@@ -460,7 +460,7 @@ cmd_decrypt(const char *params)
 
     // check the signature
     memcpy(&output[2], &indata[HMACLEN], AESLEN);
-    hmac_sha1(output, avr_keys[key_index+1], KEYLEN*8, output, (2+AESLEN)*8);
+    hmac_sha1(output, avr_keys[key_index], KEYLEN*8, output, (2+AESLEN)*8);
 
     if (memcmp(output, indata, HMACLEN) != 0) {
         printf_P(PSTR("FAIL: hmac mismatch\n"));
@@ -505,7 +505,7 @@ static void
 cmd_vcc()
 {
     uint16_t vcc = adc_vcc();
-    printf_P("vcc: %u mV\n", vcc);
+    printf_P(PSTR("vcc: %u mV\n"), vcc);
 }
 
 static void
@@ -533,7 +533,7 @@ read_handler()
     }
     else if (strncmp_P(readbuf, PSTR("decrypt "), 8) == 0)
     {
-        cmd_hmac(&readbuf[8]);
+        cmd_decrypt(&readbuf[8]);
     }
     else if (strcmp_P(readbuf, PSTR("vcc")) == 0)
     {
@@ -710,6 +710,9 @@ check_flags()
         || watchdog_short_hit
         || oneshot_hit)
     {
+		printf_P(PSTR("Rebooting! long %d, short %d, oneshot %d\n"),
+			watchdog_long_hit, watchdog_short_hit, oneshot_hit);
+		long_delay(300);
         reboot_pi();
     }
 
@@ -782,7 +785,7 @@ int main(void)
     stdout = &mystdout;
     uart_on();
 
-    printf(PSTR("Pi Watchdog\nMatt Johnston matt@ucc.asn.au"));
+    printf_P(PSTR("Pi Watchdog\nMatt Johnston matt@ucc.asn.au"));
 
     set_pi_boot_normal(0);
 
@@ -796,7 +799,9 @@ int main(void)
     // encryption test
     cmd_set_avr_key("1 6161626263636464656566666767686800000000");
     cmd_set_avr_key("2 7979757569696f6f646465656666717164646969");
-    cmd_decrypt("1 ecd858ee07a8e16575723513d2d072a7565865e40ba302059bfc650d4491268448102119");
+    //cmd_decrypt("1 ecd858ee07a8e16575723513d2d072a7565865e40ba302059bfc650d4491268448102119");
+	cmd_decrypt("1 5a587b50fd48688bbda1b510cf9a3fab6fd4737b" "0ba302059bfc650d4491268448102119");
+	cmd_hmac("2 7979757569696f6f646465656666717164646969");
 #endif
 
     // doesn't return
