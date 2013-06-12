@@ -19,7 +19,7 @@
 
 DEVICE     = atmega328
 PROGDEVICE     = atmega328p
-CLOCK      = 2000000
+CLOCK      = 8000000
 PROGRAMMER = #-c stk500v2 -P avrdoper
 PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c

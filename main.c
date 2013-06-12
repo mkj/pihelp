@@ -29,12 +29,13 @@ LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 
 #define TICK 1
 #define SLEEP_COMPARE (2000000/64)   // == 31250 exactly
+#define COUNTER_DIV (F_CPU / 2000000)
 #define NKEYS 10
 #define HMACLEN 20
 #define AESLEN 16
 #define KEYLEN HMACLEN
 
-#define BAUD 19200
+#define BAUD 38400
 #define UBRR ((F_CPU)/8/(BAUD)-1)
 
 #define PORT_PI_BOOT PORTD
@@ -60,11 +61,14 @@ struct epoch_ticks
     uint8_t rem;
 };
 
+// OCR1A ticks COUNTER_DIV(=4) times a second, we divide it down.
+static uint8_t counter_div = 0;
+
 // eeprom-settable parameters, default values defined here. 
 // all timeouts should be a multiple of TICK
-static uint32_t watchdog_long_limit = (60L*60*24);
+static uint32_t watchdog_long_limit = (60L*60*24); // 6 hours
 static uint32_t watchdog_short_limit = 0;
-static uint32_t newboot_limit = 60*10;
+static uint32_t newboot_limit = 60*10; // 10 minutes
 
 // avr proves itself
 static uint8_t avr_keys[NKEYS][KEYLEN] = {{0}};
@@ -87,6 +91,11 @@ static uint8_t watchdog_long_hit;
 static uint8_t watchdog_short_hit;
 static uint8_t newboot_hit;
 static uint8_t oneshot_hit;
+
+// flips between 0 and 1 each watchdog_long_hit, so eventually a
+// working firmware should boot. set back to 0 for each 'alive'
+// command
+static uint8_t long_reboot_mode = 0;
 
 static uint8_t readpos;
 static char readbuf[50];
@@ -131,12 +140,12 @@ setup_chip()
     WDTCSR |= _BV(WDCE) | _BV(WDE);
     WDTCSR = 0;
 
-    // set to 8S, in case sha1 is slow etc.
+    // set to 8 seconds, in case sha1 is slow etc.
     wdt_enable(WDTO_8S);
 
-    // Set clock to 2mhz
+    // Set scaler to /1, -> clock to 8mhz
     CLKPR = _BV(CLKPCE);
-    CLKPR = _BV(CLKPS1);
+    CLKPR = 0;
 
     // enable pullups
     // XXX matt pihelp
@@ -145,7 +154,7 @@ setup_chip()
     //PORTC = 0xff;
 
     // 3.3v power for bluetooth and SD
-    DDR_LED |= _BV(PIN_LED);
+    //DDR_LED |= _BV(PIN_LED);
 
 #if 0
     // set pullup
@@ -266,6 +275,16 @@ cmd_newboot()
     printf_P(PSTR("newboot for %d secs"), newboot_limit);
 }
 
+static void
+cmd_oldboot()
+{
+    set_pi_boot_normal(0);
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        newboot_count = 0;
+    }
+    printf_P(PSTR("back to old boot\n"));
+}
 
 
 static void
@@ -483,7 +502,7 @@ cmd_oneshot_reboot(const char *params)
     {
         oneshot_count = new_delay;
     }
-    printf_P(PSTR("oneshot delay %lu\n"), new_delay);
+    printf_P(PSTR("oneshot new delay %lu\n"), new_delay);
 }
 
 static void
@@ -502,6 +521,18 @@ load_params()
 }
 
 static void
+cmd_alive()
+{
+    printf_P(PSTR("Ah, good.\n"));
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        watchdog_long_count = 0;
+        watchdog_short_count = 0;
+    }
+    long_reboot_mode = 0;
+}
+
+static void
 cmd_vcc()
 {
     uint16_t vcc = adc_vcc();
@@ -511,6 +542,7 @@ cmd_vcc()
 static void
 read_handler()
 {
+    // TODO: make this an array, print automatic help
     if (strcmp_P(readbuf, PSTR("get_params")) == 0)
     {
         cmd_get_params();
@@ -535,6 +567,10 @@ read_handler()
     {
         cmd_decrypt(&readbuf[8]);
     }
+    else if (strcmp_P(readbuf, PSTR("alive")) == 0)
+    {
+        cmd_alive();
+    }
     else if (strcmp_P(readbuf, PSTR("vcc")) == 0)
     {
         cmd_vcc();
@@ -546,6 +582,10 @@ read_handler()
     else if (strcmp_P(readbuf, PSTR("newboot")) == 0)
     {
         cmd_newboot();
+    }
+    else if (strcmp_P(readbuf, PSTR("oldboot")) == 0)
+    {
+        cmd_oldboot();
     }
     else
     {
@@ -589,6 +629,12 @@ ISR(USART_RX_vect)
 ISR(TIMER1_COMPA_vect)
 {
     TCNT1 = 0;
+    counter_div++;
+    if (counter_div < COUNTER_DIV)
+    {
+        return;
+    }
+    counter_div = 0;
 
     clock_epoch += TICK;
 
@@ -706,6 +752,16 @@ set_pi_boot_normal(uint8_t normal)
 static void
 check_flags()
 {
+    if (watchdog_long_hit)
+    {
+        // alternate between booting normal and emergency
+        if (long_reboot_mode)
+        {
+            cmd_newboot();
+        }
+        long_reboot_mode ^= 1;
+    }
+
     if (watchdog_long_hit 
         || watchdog_short_hit
         || oneshot_hit)
@@ -779,6 +835,8 @@ ISR(BADISR_vect)
 
 int main(void)
 {
+    _Static_assert(F_CPU % 2000000 == 0, "F_CPU is a multiple of 2mhz for counter division");
+
     setup_chip();
     blink();
 
