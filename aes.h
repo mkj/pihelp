@@ -1,16 +1,32 @@
+//=============================================================================
+// Copyright Atmel Corporation 2003. All Rights Reserved.
+//
+// File:			des.h
+// Compiler:		IAR Atmel AVR C/EC++ Compiler
+// Output Size:
+// Based on work by:ØE, VU
+// Created:			4-Feb-2003	JP (Atmel Finland)
+// Modified:	
+//
+// Support Mail:	avr@atmel.com
+//
+// Description:		Please refer to Application Note Documentation for more
+//					information.
+//
+//					For details on DES, please refer to the official FIPS 46-3
+//					document:
+//
+//				http://csrc.nist.gov/publications/fips/fips46-3/fips46-3.pdf
+//
+//=============================================================================
+
 #ifndef AES_H
 #define AES_H
 
-// 4*nB*(nK+1)
-#define AES_EXPKEY_SIZE (4*4*(4+1))
+//#include "bootldr.h"
 
-void ExpandKey (unsigned char *key, unsigned char *expkey);
-// encrypt one 128 bit block
-void Encrypt (unsigned char *in, unsigned char *expkey, unsigned char *out);
+extern void aesInit( unsigned char *key, unsigned char * tempbuf );
+extern void aesDecrypt(unsigned char *buffer, unsigned char *chainBlock);
 
-void Decrypt (unsigned char *in, unsigned char *expkey, unsigned char *out);
+#endif // AES_H
 
-
-
-
-#endif
