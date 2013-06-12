@@ -64,11 +64,21 @@ struct epoch_ticks
 // OCR1A ticks COUNTER_DIV(=4) times a second, we divide it down.
 static uint8_t counter_div = 0;
 
+#define WATCHDOG_LONG_MIN (60L*40) // 40 mins
+#define WATCHDOG_LONG_MAX (60L*60*72) // 72 hours
+#define WATCHDOG_LONG_DEFAULT (60L*60*6) // 6 hours
+
+#define WATCHDOG_SHORT_MIN (60L*15) // 15 mins
+
+#define NEWBOOT_DEFAULT (60*10) // 10 minutes
+#define NEWBOOT_MIN (60*2) // 2 minutes
+#define NEWBOOT_MAX (60*30) // 30 mins
+
 // eeprom-settable parameters, default values defined here. 
 // all timeouts should be a multiple of TICK
-static uint32_t watchdog_long_limit = (60L*60*24); // 6 hours
+static uint32_t watchdog_long_limit = WATCHDOG_LONG_DEFAULT;
 static uint32_t watchdog_short_limit = 0;
-static uint32_t newboot_limit = 60*10; // 10 minutes
+static uint32_t newboot_limit = NEWBOOT_DEFAULT;
 
 // avr proves itself
 static uint8_t avr_keys[NKEYS][KEYLEN] = {{0}};
@@ -516,6 +526,25 @@ load_params()
         eeprom_read(watchdog_short_limit, watchdog_short_limit);
         eeprom_read(newboot_limit, newboot_limit);
    }
+
+   if (watchdog_long_limit < WATCHDOG_LONG_MIN 
+    || watchdog_long_limit > WATCHDOG_LONG_MAX)
+   {
+    watchdog_long_limit = WATCHDOG_LONG_DEFAULT;
+   }
+
+   if (watchdog_short_limit != 0
+    && watchdog_short_limit < WATCHDOG_SHORT_MIN)
+   {
+    watchdog_short_limit = 0;
+   }
+
+   if (newboot_limit < NEWBOOT_MIN || newboot_limit > NEWBOOT_MAX)
+   {
+    newboot_limit = NEWBOOT_DEFAULT;
+   }
+
+   _Static_assert(NEWBOOT_MAX < WATCHDOG_LONG_MIN, "newboot max shorter than watchdog min");
 
    eeprom_read(avr_keys, avr_keys);
 }
