@@ -421,18 +421,12 @@ cmd_set_avr_key(const char *params)
 static void
 cmd_hmac(const char *params)
 {
-    uint8_t indata[HMACLEN];
+    uint8_t indata[2+HMACLEN] = {'H', ':'};
     uint8_t outdata[HMACLEN];
     uint8_t key_index;
-    if (parse_key(params, &key_index, indata, sizeof(indata)) != 0)
+    if (parse_key(params, &key_index, &indata[2], HMACLEN) != 0)
     {
         printf_P(PSTR("FAIL: Bad input\n"));
-        return;
-    }
-
-    if (key_index % 2 != 0)
-    {
-        printf_P(PSTR("Only hmac with even keys\n"));
         return;
     }
 
@@ -440,8 +434,7 @@ cmd_hmac(const char *params)
     long_delay(200);
 #endif
 
-    hmac_sha1(outdata, avr_keys[key_index], KEYLEN*8, indata, HMACLEN*8);
-
+    hmac_sha1(outdata, avr_keys[key_index], KEYLEN*8, indata, sizeof(indata)*8);
     printf_P(PSTR("HMAC: "));
     printhex(outdata, HMACLEN, stdout);
     fputc('\n', stdout);
@@ -450,18 +443,14 @@ cmd_hmac(const char *params)
 static void
 cmd_decrypt(const char *params)
 {
-    uint8_t data[HMACLEN+AESLEN];
-    uint8_t output[HMACLEN];
+    uint8_t indata[HMACLEN+AESLEN]; // XXX
+    // a temporary buffer
+    uint8_t output[HMACLEN] = {'D', ':'};
+    _Static_assert(AESLEN+2 <= sizeof(output), "sufficient output buffer");
     uint8_t key_index;
-    if (parse_key(params, &key_index, data, sizeof(data)) != 0)
+    if (parse_key(params, &key_index, indata, sizeof(indata)) != 0)
     {
         printf_P(PSTR("FAIL: Bad input\n"));
-        return;
-    }
-
-    if (key_index % 2 == 0)
-    {
-        printf_P(PSTR("Only decrypt with odd keys\n"));
         return;
     }
 
@@ -470,15 +459,16 @@ cmd_decrypt(const char *params)
 #endif
 
     // check the signature
-    hmac_sha1(output, avr_keys[key_index+1], KEYLEN*8, &data[HMACLEN], AESLEN*8);
+    memcpy(&output[2], &indata[HMACLEN], AESLEN);
+    hmac_sha1(output, avr_keys[key_index+1], KEYLEN*8, output, (2+AESLEN)*8);
 
-    if (memcmp(output, data, HMACLEN) != 0) {
+    if (memcmp(output, indata, HMACLEN) != 0) {
         printf_P(PSTR("FAIL: hmac mismatch\n"));
     }
 
-    uint8_t expkey[AES_EXPKEY_SIZE];
-    ExpandKey(avr_keys[key_index], expkey);
-    Decrypt(&data[HMACLEN], expkey, output);
+    uint8_t tmpbuf[256];
+    aesInit(avr_keys[key_index], tmpbuf);
+    aesDecrypt(&indata[HMACLEN], NULL);
 
     printf_P(PSTR("DECRYPTED: "));
     printhex(output, AESLEN, stdout);
