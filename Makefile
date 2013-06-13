@@ -29,7 +29,7 @@ SOURCE += $(SOURCE_CRYPTO)
 LIBS       = -lm
 
 # default but 2mhz
-FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x62:m
+FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
 
 # ATMega8 fuse bits used above (fuse bits for other devices are different!):
 # Example for 8 MHz internal oscillator
@@ -43,12 +43,17 @@ FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x62:m
 #        | +------------------ DWEN
 #        +-------------------- RSTDISBL (if set to 0, RESET pin is disabled)
 # Fuse low byte:
+# 0x77   0 1 1 1   0 1 1 1  (low rising, full swing, crystal)
 # 0x62 = 0 1 1 0   0 0 1 0
 #        ^ ^ \ /   \--+--/
 #        | |  |       +------- CKSEL 3..0 (8M internal RC)
 #        | |  +--------------- SUT 1..0 (slowly rising power)
 #        | +------------------ CKOUT
-#        +-------------------- CLKDIV8
+#        +-------------------- CLKDIV8 (initial)
+
+# Extended fuse:
+# 0xfd = 2.7V BOD
+#   
 #
 # For computing fuse byte values for other devices and options see
 # the fuse bit calculator at http://www.engbedded.com/fusecalc/

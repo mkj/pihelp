@@ -34,7 +34,7 @@ LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 #define AESLEN 16
 #define KEYLEN HMACLEN
 
-#define BAUD 38400
+#define BAUD 19200
 #define UBRR ((F_CPU)/8/(BAUD)-1)
 
 #define PORT_PI_BOOT PORTD
@@ -45,9 +45,9 @@ LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 #define DDR_PI_RESET DDRD
 #define PIN_PI_RESET PD6
 
-#define PORT_LED PORTD
-#define DDR_LED DDRD
-#define PIN_LED PD7
+#define PORT_PI_WARNING PORTD
+#define DDR_PI_WARNING DDRD
+#define PIN_PI_WARNING PD7
 
 // #define HAVE_UART_ECHO
 
@@ -70,6 +70,8 @@ struct epoch_ticks
 #define NEWBOOT_MIN (60*2) // 2 minutes
 #define NEWBOOT_MAX (60*30) // 30 mins
 
+#define WARNING_TIME 10
+
 // eeprom-settable parameters, default values defined here. 
 // all timeouts should be a multiple of TICK
 static uint32_t watchdog_long_limit = WATCHDOG_LONG_DEFAULT;
@@ -89,6 +91,8 @@ static uint32_t watchdog_short_count;
 static uint32_t newboot_count;
 // oneshot counts down
 static uint32_t oneshot_count;
+// countdown after the warning.
+static uint8_t reboot_count;
 
 // ---- End atomic guards required
 
@@ -97,6 +101,7 @@ static uint8_t watchdog_long_hit;
 static uint8_t watchdog_short_hit;
 static uint8_t newboot_hit;
 static uint8_t oneshot_hit;
+static uint8_t reboot_hit;
 
 // flips between 0 and 1 each watchdog_long_hit, so eventually a
 // working firmware should boot. set back to 0 for each 'alive'
@@ -111,6 +116,7 @@ int uart_putchar(char c, FILE *stream);
 static void long_delay(int ms);
 static void blink();
 static uint16_t adc_vcc();
+static uint16_t adc_5v(uint16_t vcc);
 static void set_pi_boot_normal(uint8_t normal);
 
 
@@ -160,8 +166,7 @@ setup_chip()
     //PORTD = 0xff;
     //PORTC = 0xff;
 
-    // 3.3v power for bluetooth and SD
-    //DDR_LED |= _BV(PIN_LED);
+    DDR_PI_WARNING |= _BV(PIN_PI_WARNING);
 
 #if 0
     // set pullup
@@ -225,12 +230,16 @@ uart_on()
     // baud rate
     UBRR0H = (unsigned char)(UBRR >> 8);
     UBRR0L = (unsigned char)UBRR;
-    // set 2x clock, improves accuracy of UBRR
-    UCSR0A |= _BV(U2X0);
     UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
     //8N1
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 }
+
+#ifdef SIM_DEBUG
+static char sim_out[140];
+static uint8_t sim_idx = 0;
+static uint8_t last_sim_idx = 0;
+#endif
 
 int 
 uart_putchar(char c, FILE *stream)
@@ -243,6 +252,11 @@ uart_putchar(char c, FILE *stream)
     }
     loop_until_bit_is_set(UCSR0A, UDRE0);
     UDR0 = c;
+#ifdef SIM_DEBUG
+    sim_out[sim_idx] = c;
+    sim_idx++;
+	sim_idx %= sizeof(sim_out);
+#endif
     if (c == '\r')
     {
         loop_until_bit_is_set(UCSR0A, UDRE0);
@@ -318,7 +332,6 @@ cmd_set_params(const char *params)
             &new_watchdog_short_limit,
             &new_newboot_limit);
 
-
     if (ret != 3)
     {
         printf_P(PSTR("Bad values\n"));
@@ -338,7 +351,6 @@ cmd_set_params(const char *params)
             new_watchdog_long_limit,
             new_watchdog_short_limit,
             new_newboot_limit);
-
     }
 }
 
@@ -381,10 +393,6 @@ printhex(uint8_t *id, uint8_t n, FILE *stream)
 {
     for (uint8_t i = 0; i < n; i++)
     {
-        if (i > 0)
-        {
-            fputc(' ', stream);
-        }
         printhex_byte(id[i], stream);
     }
 }
@@ -503,6 +511,27 @@ cmd_oneshot_reboot(const char *params)
 }
 
 static void
+clamp_params()
+{
+    if (watchdog_long_limit < WATCHDOG_LONG_MIN 
+        || watchdog_long_limit > WATCHDOG_LONG_MAX)
+    {
+        watchdog_long_limit = WATCHDOG_LONG_DEFAULT;
+    }
+
+    if (watchdog_short_limit != 0
+        && watchdog_short_limit < WATCHDOG_SHORT_MIN)
+    {
+        watchdog_short_limit = 0;
+    }
+
+    if (newboot_limit < NEWBOOT_MIN || newboot_limit > NEWBOOT_MAX)
+    {
+        newboot_limit = NEWBOOT_DEFAULT;
+    }
+}
+
+static void
 load_params()
 {
     uint16_t magic;
@@ -514,23 +543,7 @@ load_params()
         eeprom_read(newboot_limit, newboot_limit);
    }
 
-   if (watchdog_long_limit < WATCHDOG_LONG_MIN 
-    || watchdog_long_limit > WATCHDOG_LONG_MAX)
-   {
-    watchdog_long_limit = WATCHDOG_LONG_DEFAULT;
-   }
-
-   if (watchdog_short_limit != 0
-    && watchdog_short_limit < WATCHDOG_SHORT_MIN)
-   {
-    watchdog_short_limit = 0;
-   }
-
-   if (newboot_limit < NEWBOOT_MIN || newboot_limit > NEWBOOT_MAX)
-   {
-    newboot_limit = NEWBOOT_DEFAULT;
-   }
-
+   clamp_params();
 
    eeprom_read(avr_keys, avr_keys);
 }
@@ -551,7 +564,8 @@ static void
 cmd_vcc()
 {
     uint16_t vcc = adc_vcc();
-    printf_P(PSTR("vcc: %u mV\n"), vcc);
+    uint16_t v5 = adc_5v(vcc);
+    printf_P(PSTR("vcc: %u mV\n5v: %u mV\n"), vcc, v5);
 }
 
 static void
@@ -573,7 +587,7 @@ read_handler()
     LOCAL_PSTR(oldboot);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
-    LOCAL_HELP(timeout, "<timeout>");
+    LOCAL_HELP(oneshot, "<timeout>");
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
 
@@ -587,7 +601,7 @@ read_handler()
         {get_params_str, cmd_get_params, NULL},
         {set_params_str, cmd_set_params, set_params_help},
         {set_key_str, cmd_set_avr_key, set_key_help},
-        {oneshot_str, cmd_oneshot_reboot, timeout_help},
+        {oneshot_str, cmd_oneshot_reboot, oneshot_help},
         {hmac_str, cmd_hmac, hmac_help},
         {decrypt_str, cmd_decrypt, decrypt_help},
         {alive_str, cmd_alive, NULL},
@@ -602,7 +616,7 @@ read_handler()
         return;
     }
 
-    if (strcmp_P(readbuf, PSTR("help")))
+    if (strcmp_P(readbuf, PSTR("help")) == 0)
     {
         printf_P(PSTR("Commands:---\n"));
         for (int i = 0; i < sizeof(handlers) / sizeof(handlers[0]); i++)
@@ -618,6 +632,7 @@ read_handler()
             putchar('\n');
         };
         printf_P(PSTR("---\n"));
+		return;
     }
 
     for (int i = 0; i < sizeof(handlers) / sizeof(handlers[0]); i++)
@@ -632,8 +647,7 @@ read_handler()
             {
                 if (readbuf[h_len] == ' ')
                 {
-                    void(*cmd)(const char*) = (void*)pgm_read_word(h.cmd);
-                    cmd(&readbuf[h_len+1]);
+                    h.cmd(&readbuf[h_len+1]);
                     return;
                 }
             }
@@ -641,63 +655,13 @@ read_handler()
             {
                 if (readbuf[h_len] == '\0')
                 {
-                    void(*void_cmd)() = (void*)pgm_read_word(h.cmd);
+                    void(*void_cmd)() = h.cmd;
                     void_cmd();
                     return;
                 }
             }
         }
     }
-
-#if 0
-    // TODO: make this an array, print automatic help
-    if (strcmp_P(readbuf, PSTR("get_params")) == 0)
-    {
-        cmd_get_params();
-    }
-    else if (strncmp_P(readbuf, PSTR("set_params "), 11) == 0)
-    {
-        cmd_set_params(&readbuf[11]);
-    }
-    else if (strncmp_P(readbuf, PSTR("set_key "), 8) == 0)
-    {
-        cmd_set_avr_key(&readbuf[8]);
-    }
-    else if (strncmp_P(readbuf, PSTR("oneshot "), 8) == 0)
-    {
-        cmd_oneshot_reboot(&readbuf[8]);
-    }
-    else if (strncmp_P(readbuf, PSTR("hmac "), 5) == 0)
-    {
-        cmd_hmac(&readbuf[5]);
-    }
-    else if (strncmp_P(readbuf, PSTR("decrypt "), 8) == 0)
-    {
-        cmd_decrypt(&readbuf[8]);
-    }
-    else if (strcmp_P(readbuf, PSTR("alive")) == 0)
-    {
-        cmd_alive();
-    }
-    else if (strcmp_P(readbuf, PSTR("vcc")) == 0)
-    {
-        cmd_vcc();
-    }
-    else if (strcmp_P(readbuf, PSTR("reset")) == 0)
-    {
-        cmd_reset();
-    }
-    else if (strcmp_P(readbuf, PSTR("newboot")) == 0)
-    {
-        cmd_newboot();
-    }
-    else if (strcmp_P(readbuf, PSTR("oldboot")) == 0)
-    {
-        cmd_oldboot();
-    }
-    else
-
-    #endif
 
     printf_P(PSTR("Bad command '%s'\n"), readbuf);
 }
@@ -780,6 +744,16 @@ ISR(TIMER1_COMPA_vect)
             oneshot_count = 0;
         }
     }
+
+    if (reboot_count > 0)
+    {
+        reboot_count -= TICK;
+        if (reboot_count <= 0)
+        {
+            reboot_hit = 1;
+            reboot_count = 0;
+        }
+    }
 }
 
 static void
@@ -825,14 +799,64 @@ adc_vcc()
     return ((uint32_t)1100*1024*num) / sum;
 }
 
+#define SCALER_5V 2
+
+static uint16_t
+adc_5v(uint16_t vcc)
+{
+    PRR &= ~_BV(PRADC);
+    
+    // /16 prescaler
+    ADCSRA = _BV(ADEN) | _BV(ADPS2);
+
+    // set to measure ADC4 against AVCC
+    ADMUX = _BV(REFS0) | _BV(MUX2);
+    // average a number of samples
+    uint16_t sum = 0;
+    uint8_t num = 0;
+    for (uint8_t n = 0; n < 20; n++)
+    {
+        ADCSRA |= _BV(ADSC);
+        loop_until_bit_is_clear(ADCSRA, ADSC);
+
+        uint8_t low_11 = ADCL;
+        uint8_t high_11 = ADCH;
+        uint16_t val = low_11 + (high_11 << 8);
+
+        if (n >= 4)
+        {
+            sum += val;
+            num++;
+        }
+    }
+    ADCSRA = 0;
+    PRR |= _BV(PRADC);
+
+    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));;
+}
+
 static void
 reboot_pi()
 {
-    // pull it low for 30ms
+    printf_P(PSTR("Real reboot now\n"));
+    // pull it low for 200ms
     PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
     DDR_PI_RESET |= _BV(PIN_PI_RESET);
-    _delay_ms(30);
-    DDR_PI_RESET &= ~_BV(PIN_PI_RESET);
+    _delay_ms(200);
+	
+	PORT_PI_WARNING &= ~_BV(PIN_PI_WARNING);
+    DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
+}
+
+static void
+wait_reboot_pi()
+{
+	PORT_PI_WARNING |= _BV(PIN_PI_WARNING);
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        reboot_count = WARNING_TIME;
+    }
+    printf_P(PSTR("Rebooting in %hhu seconds\n"), reboot_count);
 }
 
 static void
@@ -871,18 +895,22 @@ check_flags()
     {
 		printf_P(PSTR("Rebooting! long %d, short %d, oneshot %d\n"),
 			watchdog_long_hit, watchdog_short_hit, oneshot_hit);
-		long_delay(300);
-        reboot_pi();
+        wait_reboot_pi();
     }
 
     if (newboot_hit) {
         set_pi_boot_normal(0);
     }
 
+    if (reboot_hit) {
+        reboot_pi();
+    }
+
     watchdog_long_hit = 0;
     watchdog_short_hit = 0;
     newboot_hit = 0;
     oneshot_hit = 0;
+    reboot_hit = 0;
 }
 
 static void
@@ -896,6 +924,13 @@ do_comms()
     while (1)
     {
         wdt_reset();
+
+#ifdef SIM_DEBUG
+        if (sim_idx != last_sim_idx)
+        {
+            last_sim_idx = sim_idx;
+        }
+#endif
 
         check_flags();
 
@@ -914,9 +949,11 @@ do_comms()
 static void
 blink()
 {
-    PORT_LED &= ~_BV(PIN_LED);
+    #if 0
+    PORT_ &= ~_BV(PIN_LED);
     _delay_ms(1);
     PORT_LED |= _BV(PIN_LED);
+    #endif
 }
 
 static void
