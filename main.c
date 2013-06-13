@@ -28,8 +28,7 @@ LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 // to be a multiple.
 
 #define TICK 1
-#define SLEEP_COMPARE (2000000/64)   // == 31250 exactly
-#define COUNTER_DIV (F_CPU / 2000000)
+#define SLEEP_COMPARE (F_CPU/256)   // == 19200 for 4915200mhz
 #define NKEYS 10
 #define HMACLEN 20
 #define AESLEN 16
@@ -60,9 +59,6 @@ struct epoch_ticks
     // remainder
     uint8_t rem;
 };
-
-// OCR1A ticks COUNTER_DIV(=4) times a second, we divide it down.
-static uint8_t counter_div = 0;
 
 #define WATCHDOG_LONG_MIN (60L*40) // 40 mins
 #define WATCHDOG_LONG_MAX (60L*60*72) // 72 hours
@@ -116,6 +112,7 @@ static void long_delay(int ms);
 static void blink();
 static uint16_t adc_vcc();
 static void set_pi_boot_normal(uint8_t normal);
+
 
 static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
         _FDEV_SETUP_WRITE);
@@ -233,16 +230,6 @@ uart_on()
     UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
     //8N1
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
-}
-
-static void 
-uart_off()
-{
-    // Turn off interrupts and disable tx/rx
-    UCSR0B = 0;
-
-    // Power reduction register
-    PRR |= _BV(PRUSART0);
 }
 
 int 
@@ -544,7 +531,6 @@ load_params()
     newboot_limit = NEWBOOT_DEFAULT;
    }
 
-   _Static_assert(NEWBOOT_MAX < WATCHDOG_LONG_MIN, "newboot max shorter than watchdog min");
 
    eeprom_read(avr_keys, avr_keys);
 }
@@ -571,6 +557,99 @@ cmd_vcc()
 static void
 read_handler()
 {
+#define LOCAL_PSTR(x) const static char x ## _str[] PROGMEM = #x;
+#define LOCAL_HELP(x, d) const static char x ## _help[] PROGMEM = d;
+
+    LOCAL_PSTR(get_params);
+    LOCAL_PSTR(set_params);
+    LOCAL_PSTR(set_key);
+    LOCAL_PSTR(oneshot);
+    LOCAL_PSTR(hmac);
+    LOCAL_PSTR(decrypt);
+    LOCAL_PSTR(alive);
+    LOCAL_PSTR(vcc);
+    LOCAL_PSTR(reset);
+    LOCAL_PSTR(newboot);
+    LOCAL_PSTR(oldboot);
+    LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
+    LOCAL_HELP(set_key, "20_byte_hex>");
+    LOCAL_HELP(timeout, "<timeout>");
+    LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
+    LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
+
+    static const struct handler {
+        PGM_P name;
+        void(*cmd)(const char *param);
+        // existence of arg_help indicates if the cmd takes a parameter.
+        PGM_P arg_help;
+    } handlers[11] PROGMEM = 
+    {
+        {get_params_str, cmd_get_params, NULL},
+        {set_params_str, cmd_set_params, set_params_help},
+        {set_key_str, cmd_set_avr_key, set_key_help},
+        {oneshot_str, cmd_oneshot_reboot, timeout_help},
+        {hmac_str, cmd_hmac, hmac_help},
+        {decrypt_str, cmd_decrypt, decrypt_help},
+        {alive_str, cmd_alive, NULL},
+        {vcc_str, cmd_vcc, NULL},
+        {reset_str, cmd_reset, NULL},
+        {newboot_str, cmd_newboot, NULL},
+        {oldboot_str, cmd_oldboot, NULL},
+    };
+
+    if (readbuf[0] == '\0')
+    {
+        return;
+    }
+
+    if (strcmp_P(readbuf, PSTR("help")))
+    {
+        printf_P(PSTR("Commands:---\n"));
+        for (int i = 0; i < sizeof(handlers) / sizeof(handlers[0]); i++)
+        {
+            struct handler h;
+            memcpy_P(&h, &handlers[i], sizeof(h));
+            printf_P(h.name);
+            if (h.arg_help)
+            {
+                putchar(' ');
+                printf_P(h.arg_help);
+            }
+            putchar('\n');
+        };
+        printf_P(PSTR("---\n"));
+    }
+
+    for (int i = 0; i < sizeof(handlers) / sizeof(handlers[0]); i++)
+    {
+        struct handler h;
+        memcpy_P(&h, &handlers[i], sizeof(h));
+
+        const int h_len = strlen_P(h.name);
+        if (strncmp_P(readbuf, h.name, h_len) == 0)
+        {
+            if (h.arg_help)
+            {
+                if (readbuf[h_len] == ' ')
+                {
+                    void(*cmd)(const char*) = (void*)pgm_read_word(h.cmd);
+                    cmd(&readbuf[h_len+1]);
+                    return;
+                }
+            }
+            else 
+            {
+                if (readbuf[h_len] == '\0')
+                {
+                    void(*void_cmd)() = (void*)pgm_read_word(h.cmd);
+                    void_cmd();
+                    return;
+                }
+            }
+        }
+    }
+
+#if 0
     // TODO: make this an array, print automatic help
     if (strcmp_P(readbuf, PSTR("get_params")) == 0)
     {
@@ -617,9 +696,10 @@ read_handler()
         cmd_oldboot();
     }
     else
-    {
-        printf_P(PSTR("Bad command '%s'\n"), readbuf);
-    }
+
+    #endif
+
+    printf_P(PSTR("Bad command '%s'\n"), readbuf);
 }
 
 ISR(INT0_vect)
@@ -658,12 +738,6 @@ ISR(USART_RX_vect)
 ISR(TIMER1_COMPA_vect)
 {
     TCNT1 = 0;
-    counter_div++;
-    if (counter_div < COUNTER_DIV)
-    {
-        return;
-    }
-    counter_div = 0;
 
     clock_epoch += TICK;
 
@@ -864,7 +938,8 @@ ISR(BADISR_vect)
 
 int main(void)
 {
-    _Static_assert(F_CPU % 2000000 == 0, "F_CPU is a multiple of 2mhz for counter division");
+    _Static_assert(F_CPU % 256 == 0, "clock prescaler remainder 0");
+    _Static_assert(NEWBOOT_MAX < WATCHDOG_LONG_MIN, "newboot max shorter than watchdog min");
 
     setup_chip();
     blink();
