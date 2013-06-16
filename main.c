@@ -104,6 +104,9 @@ static uint8_t newboot_hit;
 static uint8_t oneshot_hit;
 static uint8_t reboot_hit;
 
+// informational for status messages
+static uint8_t boot_normal_status;
+
 // flips between 0 and 1 each watchdog_long_hit, so eventually a
 // working firmware should boot. set back to 0 for each 'alive'
 // command
@@ -114,7 +117,7 @@ static char readbuf[150];
 static uint8_t have_cmd;
 
 int uart_putchar(char c, FILE *stream);
-static void long_delay(int ms);
+static void long_delay(uint16_t ms);
 static void blink();
 static uint16_t adc_vcc();
 static uint16_t adc_5v(uint16_t vcc);
@@ -317,12 +320,14 @@ cmd_status()
         "newboot %lu (%lu)\n"
         "oneshot (%lu)\n"
         "uptime %lu rem %u\n"
+        "boot normal %hhu\n"
         ),
         watchdog_long_limit, cur_watchdog_long, long_reboot_mode,
         watchdog_short_limit, cur_watchdog_short,
         newboot_limit, cur_newboot,
         cur_oneshot,
-        t.ticks, t.rem);
+        t.ticks, t.rem,
+        boot_normal_status);
 }
 
 static void
@@ -827,6 +832,9 @@ adc_generic(uint8_t admux, uint8_t *ret_num, uint16_t *ret_sum)
 
     // set to measure 1.1 reference
     ADMUX = admux;
+
+    // delay after setting reference etc, allow settling
+    long_delay(300);
     // average a number of samples
     uint16_t sum = 0;
     uint8_t num = 0;
@@ -885,14 +893,15 @@ static uint16_t
 adc_temp()
 {
     // set to measure temperature against 1.1v reference.
-    const uint8_t mux = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    const uint8_t mux = _BV(REFS0) | _BV(REFS1) | _BV(MUX3);
     uint16_t sum;
     uint8_t num;
     
     adc_generic(mux, &num, &sum);
 
     // return the voltage
-    return ((uint32_t)1100*1024*sum) / num;
+
+    return ((uint32_t)1100*sum) / (num*1024);
 }
 
 static void
@@ -922,6 +931,7 @@ wait_reboot_pi()
 static void
 set_pi_boot_normal(uint8_t normal) 
 {
+    boot_normal_status = normal;
     PORT_PI_BOOT &= ~_BV(PIN_PI_BOOT);
     if (normal) 
     {
@@ -1017,13 +1027,13 @@ blink()
 }
 
 static void
-long_delay(int ms)
+long_delay(uint16_t ms)
 {
-    int iter = ms / 100;
+    uint16_t iter = ms / 10;
 
-    for (int i = 0; i < iter; i++)
+    for (uint16_t i = 0; i < iter; i++)
     {
-        _delay_ms(100);
+        _delay_ms(10);
     }
 }
 
