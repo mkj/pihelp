@@ -574,7 +574,13 @@ cmd_vcc()
 {
     uint16_t vcc = adc_vcc();
     uint16_t v5 = adc_5v(vcc);
-    printf_P(PSTR("vcc: %u mV\n5v: %u mV\n"), vcc, v5);
+    uint16_t temp = adc_temp();
+    // roughly?
+    uint16_t temp_deg = temp - 290;
+    printf_P(PSTR("vcc: %u mV\n"
+                    "5v: %u mV\n"
+                    "temp: %u mV (%dºC)\n"), 
+        vcc, v5, temp, temp_deg);
 }
 
 void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7e00;
@@ -811,8 +817,8 @@ idle_sleep()
     sleep_mode();
 }
 
-static uint16_t
-adc_vcc()
+static void
+adc_generic(uint8_t admux, uint8_t *ret_num, uint16_t *ret_sum)
 {
     PRR &= ~_BV(PRADC);
     
@@ -820,7 +826,7 @@ adc_vcc()
     ADCSRA = _BV(ADEN) | _BV(ADPS2);
 
     // set to measure 1.1 reference
-    ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    ADMUX = admux;
     // average a number of samples
     uint16_t sum = 0;
     uint8_t num = 0;
@@ -841,6 +847,19 @@ adc_vcc()
     }
     ADCSRA = 0;
     PRR |= _BV(PRADC);
+
+    *ret_num = num;
+    *ret_sum = sum;
+}
+
+static uint16_t
+adc_vcc()
+{
+    const uint8_t mux = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    uint16_t sum;
+    uint8_t num;
+
+    adc_generic(mux, &num, &sum);
 
     //float res_volts = 1.1 * 1024 * num / sum;
     //return 1000 * res_volts;
@@ -852,35 +871,28 @@ adc_vcc()
 static uint16_t
 adc_5v(uint16_t vcc)
 {
-    PRR &= ~_BV(PRADC);
-    
-    // /16 prescaler
-    ADCSRA = _BV(ADEN) | _BV(ADPS2);
-
     // set to measure ADC4 against AVCC
-    ADMUX = _BV(REFS0) | _BV(MUX2);
-    // average a number of samples
-    uint16_t sum = 0;
-    uint8_t num = 0;
-    for (uint8_t n = 0; n < 20; n++)
-    {
-        ADCSRA |= _BV(ADSC);
-        loop_until_bit_is_clear(ADCSRA, ADSC);
+    const uint8_t mux = _BV(REFS0) | _BV(MUX2);
+    uint16_t sum;
+    uint8_t num;
+    
+    adc_generic(mux, &num, &sum);
 
-        uint8_t low_11 = ADCL;
-        uint8_t high_11 = ADCH;
-        uint16_t val = low_11 + (high_11 << 8);
+    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));
+}
 
-        if (n >= 4)
-        {
-            sum += val;
-            num++;
-        }
-    }
-    ADCSRA = 0;
-    PRR |= _BV(PRADC);
+static uint16_t
+adc_temp()
+{
+    // set to measure temperature against 1.1v reference.
+    const uint8_t mux = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    uint16_t sum;
+    uint8_t num;
+    
+    adc_generic(mux, &num, &sum);
 
-    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));;
+    // return the voltage
+    return ((uint32_t)1100*1024*sum) / num;
 }
 
 static void
