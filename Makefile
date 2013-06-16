@@ -6,7 +6,7 @@
 # This is a prototype Makefile. Modify it according to your needs.
 # You should at least check the settings for
 # DEVICE ....... The AVR device you compile for
-# CLOCK ........ Target AVR clock rate in Hertz
+# CLOCK ........ Target AVR CLOCK rate in Hertz
 # OBJECTS ...... The object files created from your source files. This list is
 #                usually the same as the list of source files with suffix ".o".
 # PROGRAMMER ... Options to avrdude which define the hardware you use for
@@ -19,7 +19,7 @@
 
 DEVICE     = atmega328
 PROGDEVICE     = atmega328p
-CLOCK      = 4915200
+CLOCK      = 4915200L
 PROGRAMMER = #-c stk500v2 -P avrdoper
 PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
@@ -82,7 +82,7 @@ all:	main.hex
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:main.hex:i
+	$(AVRDUDE) -D -U flash:w:main.hex:i
 
 checkprog:	
 	$(AVRDUDE) -v 
