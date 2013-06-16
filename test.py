@@ -1,4 +1,4 @@
-#!/Users/matt/tmp/crypto/bin/python
+#!/usr/bin/env python
 
 from Crypto.Cipher import AES
 import hashlib
@@ -20,6 +20,11 @@ cli_key = 'yyuuiiooddeeffqqddii'
 enc_key = 'aabbccddeeffgghh\0\0\0\0'
 indata =  '1234567890123456'
 
+a_key = unhexlify('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bs = unhexlify('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+threes = '33333333333333333333'
+print len(threes)
+
 print "cli_key %s, hex %s" % (cli_key, hexlify(cli_key))
 print "enc_key %s, hex %s" % (enc_key, hexlify(enc_key))
 print "data    %s, hex %s" % (indata, hexlify(indata))
@@ -34,7 +39,10 @@ print "enc     hex %s" % hexlify(enc)
 h = hmac.new(enc_key, 'D:' + enc, hashlib.sha1).digest()
 print "enc hmac hex %s" % hexlify(h)
 
-h = hmac.new(cli_key, 'H:' + cli_key, hashlib.sha1).digest()
-print "hmac test hex %s" % hexlify(h)
+h = hmac.new(a_key, 'H:' + bs, hashlib.sha1).digest()
+print "hmac test aaaa bbbbhex %s" % hexlify(h)
+
+h = hmac.new(threes, 'H:' + threes, hashlib.sha1).digest()
+print "hmac test aaaa bbbbhex %s" % hexlify(h)
 
 
