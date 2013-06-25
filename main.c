@@ -16,6 +16,12 @@
 #include "hmac-sha1.h"
 #include "aes.h"
 
+#include "fat.h"
+#include "fat_config.h"
+#include "partition.h"
+#include "sd_raw.h"
+#include "sd_raw_config.h"
+
 //#include "simple_ds18b20.h"
 //#include "onewire.h"
 
@@ -265,6 +271,56 @@ uart_putchar(char c, FILE *stream)
     return (unsigned char)c;
 }
 
+uint8_t find_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name, struct fat_dir_entry_struct* dir_entry)
+{
+    while(fat_read_dir(dd, dir_entry))
+    {
+        if(strcmp(dir_entry->long_name, name) == 0)
+        {
+            fat_reset_dir(dd);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+struct fat_file_struct* 
+open_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name)
+{
+    struct fat_dir_entry_struct file_entry;
+    if(!find_file_in_dir(fs, dd, name, &file_entry))
+        return 0;
+
+    return fat_open_file(fs, &file_entry);
+}
+
+static void
+hmac_file(const char* fn)
+{
+    sd_raw_init();
+    struct partition_struct* partition = partition_open(sd_raw_read, sd_raw_read_interval, 0, 0, 0);
+    struct fat_fs_struct* fs = fat_open(partition);
+    struct fat_dir_entry_struct directory;
+    fat_get_dir_entry_of_path(fs, "/", &directory);
+
+    struct sd_raw_info disk_info;
+    sd_raw_get_info(&disk_info);
+    printf("diskinfo size %d", disk_info.capacity);
+
+    struct fat_dir_struct* dd = fat_open_dir(fs, &directory);
+    struct fat_file_struct* fd = open_file_in_dir(fs, dd, "fn");
+
+    char c = 0;
+    char buf[512];
+    for (int i = 0; i < 10; i++)
+    {
+        fat_read_file(fd, buf, sizeof(buf));
+        c ^= buf[0];
+    }
+    printf("total %d\n", c);
+}
+
 static void
 cmd_reset()
 {
@@ -491,8 +547,8 @@ cmd_decrypt(const char *params)
     }
 
     uint8_t tmpbuf[256];
-    aesInit(avr_keys[key_index], tmpbuf);
-    aesDecrypt(&indata[HMACLEN], NULL);
+    //aesInit(avr_keys[key_index], tmpbuf);
+    //aesDecrypt(&indata[HMACLEN], NULL);
 
     printf_P(PSTR("DECRYPTED: "));
     printhex(output, AESLEN, stdout);
@@ -846,6 +902,8 @@ reboot_pi()
 	
 	PORT_PI_WARNING &= ~_BV(PIN_PI_WARNING);
     DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
+
+    hmac_file("stuff");
 }
 
 static void
