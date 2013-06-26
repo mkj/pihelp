@@ -762,8 +762,10 @@ adc_generic(uint8_t admux, uint8_t *ret_num, uint16_t *ret_sum)
 {
     PRR &= ~_BV(PRADC);
     
-    // /64 prescaler, interrupt
-    ADCSRA = _BV(ADEN) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADIE);
+    // /128 prescaler (86kHz), interrupt
+    ADCSRA = _BV(ADEN) 
+        | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0)
+        | _BV(ADIE);
 
     // set to measure 1.1 reference
     ADMUX = admux;
