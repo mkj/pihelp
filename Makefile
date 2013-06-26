@@ -74,7 +74,7 @@ FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
 
 AVRDUDE = avrdude $(PROGRAMMER) 
 #COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -mcall-prologues -fdata-sections -ffunction-sections  -Wl,--gc-sections -Wl,--relax -fwhole-program  -Wl,-u,vfprintf -lprintf_flt -lm
-COMPILE = /usr/local/CrossPack-AVR/bin/avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -Wl,-u,vfprintf -lprintf_flt -lm
+COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -Wl,-u,vfprintf -lprintf_flt -lm
 
 # symbolic targets:
 all:	main.hex
@@ -93,7 +93,7 @@ all:	main.hex
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -D -U flash:w:main.hex:i
+	$(AVRDUDE) -U flash:w:main.hex:i
 
 checkprog:	
 	$(AVRDUDE) -v 
