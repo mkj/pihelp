@@ -6,7 +6,7 @@
 # This is a prototype Makefile. Modify it according to your needs.
 # You should at least check the settings for
 # DEVICE ....... The AVR device you compile for
-# CLOCK ........ Target AVR clock rate in Hertz
+# CLOCK ........ Target AVR CLOCK rate in Hertz
 # OBJECTS ...... The object files created from your source files. This list is
 #                usually the same as the list of source files with suffix ".o".
 # PROGRAMMER ... Options to avrdude which define the hardware you use for
@@ -19,7 +19,7 @@
 
 DEVICE     = atmega328p
 PROGDEVICE     = atmega328p
-CLOCK      = 4915200
+CLOCK      = 4915200L
 PROGRAMMER = #-c stk500v2 -P avrdoper
 PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
@@ -33,6 +33,17 @@ OBJECTS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SOURCE)))
 
 # default but 2mhz
 FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
+
+#LOCKBIT
+# -U lock:w:0x28:m
+# 0  unused bit7
+# 0  unused
+# 1 blb12  no writing to bootloader
+# 0 blb11
+# 1 blb02  no writing to app
+# 0 blb01
+# 0 lb2
+# 0 lb1 bit0
 
 # ATMega8 fuse bits used above (fuse bits for other devices are different!):
 # Example for 8 MHz internal oscillator
@@ -88,7 +99,7 @@ all:	main.hex
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:main.hex:i
+	$(AVRDUDE) -D -U flash:w:main.hex:i
 
 checkprog:	
 	$(AVRDUDE) -v 

@@ -25,7 +25,8 @@
 //#include "simple_ds18b20.h"
 //#include "onewire.h"
 
-LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
+// not set via bootloader
+//LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
@@ -40,8 +41,8 @@ LOCKBITS = (LB_MODE_3 & BLB0_MODE_4 & BLB1_MODE_4);
 #define AESLEN 16
 #define KEYLEN HMACLEN
 
-#define BAUD 19200
-#define UBRR ((F_CPU)/8/(BAUD)-1)
+#define BAUD 38400
+#define UBRR ((F_CPU)/(16*(BAUD))-1)
 
 #define PORT_PI_BOOT PORTD
 #define DDR_PI_BOOT DDRD
@@ -63,7 +64,7 @@ struct epoch_ticks
 {
     uint32_t ticks;
     // remainder
-    uint8_t rem;
+    uint16_t rem;
 };
 
 #define WATCHDOG_LONG_MIN (60L*40) // 40 mins
@@ -109,20 +110,24 @@ static uint8_t newboot_hit;
 static uint8_t oneshot_hit;
 static uint8_t reboot_hit;
 
+// informational for status messages
+static uint8_t boot_normal_status;
+
 // flips between 0 and 1 each watchdog_long_hit, so eventually a
 // working firmware should boot. set back to 0 for each 'alive'
 // command
 static uint8_t long_reboot_mode = 0;
 
 static uint8_t readpos;
-static char readbuf[50];
+static char readbuf[150];
 static uint8_t have_cmd;
 
 int uart_putchar(char c, FILE *stream);
-static void long_delay(int ms);
+static void long_delay(uint16_t ms);
 static void blink();
 static uint16_t adc_vcc();
 static uint16_t adc_5v(uint16_t vcc);
+static uint16_t adc_temp();
 static void set_pi_boot_normal(uint8_t normal);
 
 
@@ -152,12 +157,6 @@ static void
 setup_chip()
 {
     cli();
-
-    // stop watchdog timer (might have been used to cause a reset)
-    wdt_reset();
-    MCUSR &= ~_BV(WDRF);
-    WDTCSR |= _BV(WDCE) | _BV(WDE);
-    WDTCSR = 0;
 
     // set to 8 seconds, in case sha1 is slow etc.
     wdt_enable(WDTO_8S);
@@ -217,8 +216,8 @@ setup_tick_counter()
     // systemclock/8
     TCCR1B = _BV(CS11);
 #else
-    // systemclock/64
-    TCCR1B = _BV(CS11) | _BV(CS10);
+    // systemclock/256
+    TCCR1B = _BV(CS12);
 #endif
     TCNT1 = 0;
     OCR1A = SLEEP_COMPARE;
@@ -321,8 +320,9 @@ hmac_file(const char* fn)
     printf("total %d\n", c);
 }
 
+static void cmd_reset() __attribute__ ((noreturn));
 static void
-cmd_reset()
+cmd_reset()  
 {
     printf_P(PSTR("reset\n"));
     _delay_ms(100);
@@ -339,7 +339,7 @@ cmd_newboot()
     {
         newboot_count = newboot_limit;
     }
-    printf_P(PSTR("newboot for %d secs"), newboot_limit);
+    printf_P(PSTR("newboot for %d secs\n"), newboot_limit);
 }
 
 static void
@@ -355,9 +355,13 @@ cmd_oldboot()
 
 
 static void
-cmd_get_params()
+cmd_status()
 {
     uint32_t cur_watchdog_long, cur_watchdog_short, cur_newboot, cur_oneshot;
+    struct epoch_ticks t;
+
+    get_epoch_ticks(&t);
+
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {
         cur_watchdog_long = watchdog_long_count;
@@ -366,14 +370,20 @@ cmd_get_params()
         cur_oneshot = oneshot_count;
     }
 
-    printf_P(PSTR("limit (count) : watchdog_long %lu (%lu) watchdog_short %lu (%lu) newboot %lu (%lu) oneshot (%lu)\n"),
-        watchdog_long_limit,
-        cur_watchdog_long,
-        watchdog_short_limit,
-        cur_watchdog_short,
-        newboot_limit,
-        cur_newboot,
-        cur_oneshot);
+    printf_P(PSTR("limit (current)\n"
+        "watchdog_long %lu (%lu) watchdog newboot mode %d\n"
+        "watchdog_short %lu (%lu)\n"
+        "newboot %lu (%lu)\n"
+        "oneshot (%lu)\n"
+        "uptime %lu rem %u\n"
+        "boot normal %hhu\n"
+        ),
+        watchdog_long_limit, cur_watchdog_long, long_reboot_mode,
+        watchdog_short_limit, cur_watchdog_short,
+        newboot_limit, cur_newboot,
+        cur_oneshot,
+        t.ticks, t.rem,
+        boot_normal_status);
 }
 
 static void
@@ -459,7 +469,8 @@ parse_key(const char *params, uint8_t *key_index, uint8_t *bytes,
 {
     // "N HEXKEY"
     if (strlen(params) != bytes_len*2 + 2) {
-        printf_P(PSTR("Wrong length key\n"));
+        printf_P(PSTR("Wrong length key. wanted %d, got %d, '%s'\n"),
+            bytes_len*2+2, strlen(params), params);
         return -1;
     }
 
@@ -496,6 +507,9 @@ cmd_set_avr_key(const char *params)
 #ifndef SIM_DEBUG
     eeprom_write(avr_keys, avr_keys);
 #endif
+    printf_P(PSTR("Set key %d: "), key_index);
+    printhex(new_key, sizeof(new_key), stdout);
+    putchar('\n');
 }
 
 static void
@@ -517,7 +531,7 @@ cmd_hmac(const char *params)
     hmac_sha1(outdata, avr_keys[key_index], KEYLEN*8, indata, sizeof(indata)*8);
     printf_P(PSTR("HMAC: "));
     printhex(outdata, HMACLEN, stdout);
-    fputc('\n', stdout);
+    putchar('\n');
 }
 
 static void
@@ -552,7 +566,7 @@ cmd_decrypt(const char *params)
 
     printf_P(PSTR("DECRYPTED: "));
     printhex(output, AESLEN, stdout);
-    fputc('\n', stdout);
+    putchar('\n');
 }
 
 static void
@@ -622,8 +636,55 @@ cmd_vcc()
     uint16_t vcc = adc_vcc();
     uint16_t v5 = adc_5v(vcc);
     uint16_t r = adc_random();
-    printf_P(PSTR("vcc: %u mV\n5v: %u mV random %u\n"), vcc, v5, r);
+    uint16_t temp = adc_temp();
+    // roughly?
+    uint16_t temp_deg = temp - 290;
+    printf_P(PSTR("vcc: %u mV\n"
+                    "5v: %u mV\n"
+                    "temp: %u mV (%dºC)\n"
+                    "random: %u\n"
+                    ),
+        vcc, v5, temp, temp_deg, r);
 }
+
+void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7e00;
+
+#if 0
+#ifndef PROG_PASSWORD
+#define PROG_PASSWORD "Y2vvjxO5"
+#endif
+
+static void
+cmd_prog(const char* arg)
+{
+    if (strcmp(arg, PROG_PASSWORD) != 0)
+    {
+        printf_P(PSTR("Bad prog password\n"));
+        return;
+    }
+
+    // disable wdt
+    wdt_disable();
+
+    // disable interrupts
+    TIMSK0 = 0;
+    TIMSK1 = 0;
+    TIMSK2 = 0;
+    EIMSK = 0;
+    PCMSK0 = 0;
+    PCMSK1 = 0;
+    PCMSK2 = 0;
+    ACSR &= ~_BV(ACIE);
+    ADCSRA &= ~_BV(ADIE);
+    UCSR0B &= ~_BV(RXCIE0);
+    UCSR0B &= _BV(TXCIE0);
+    // doesn't do TWI, other uart, probably others
+
+    _delay_ms(20);
+
+    bootloader();
+}
+#endif
 
 static void
 read_handler()
@@ -631,7 +692,6 @@ read_handler()
 #define LOCAL_PSTR(x) const static char x ## _str[] PROGMEM = #x;
 #define LOCAL_HELP(x, d) const static char x ## _help[] PROGMEM = d;
 
-    LOCAL_PSTR(get_params);
     LOCAL_PSTR(set_params);
     LOCAL_PSTR(set_key);
     LOCAL_PSTR(oneshot);
@@ -642,6 +702,7 @@ read_handler()
     LOCAL_PSTR(reset);
     LOCAL_PSTR(newboot);
     LOCAL_PSTR(oldboot);
+    LOCAL_PSTR(status);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
@@ -653,19 +714,19 @@ read_handler()
         void(*cmd)(const char *param);
         // existence of arg_help indicates if the cmd takes a parameter.
         PGM_P arg_help;
-    } handlers[11] PROGMEM = 
+    } handlers[] PROGMEM = 
     {
-        {get_params_str, cmd_get_params, NULL},
-        {set_params_str, cmd_set_params, set_params_help},
-        {set_key_str, cmd_set_avr_key, set_key_help},
-        {oneshot_str, cmd_oneshot_reboot, oneshot_help},
-        {hmac_str, cmd_hmac, hmac_help},
-        {decrypt_str, cmd_decrypt, decrypt_help},
         {alive_str, cmd_alive, NULL},
-        {vcc_str, cmd_vcc, NULL},
-        {reset_str, cmd_reset, NULL},
         {newboot_str, cmd_newboot, NULL},
         {oldboot_str, cmd_oldboot, NULL},
+        {oneshot_str, cmd_oneshot_reboot, oneshot_help},
+        {status_str, cmd_status, NULL},
+        {hmac_str, cmd_hmac, hmac_help},
+        {decrypt_str, cmd_decrypt, decrypt_help},
+        {set_params_str, cmd_set_params, set_params_help},
+        {set_key_str, cmd_set_avr_key, set_key_help},
+        {vcc_str, cmd_vcc, NULL},
+        {reset_str, cmd_reset, NULL},
     };
 
     if (readbuf[0] == '\0')
@@ -820,8 +881,8 @@ idle_sleep()
     sleep_mode();
 }
 
-static uint16_t
-adc_vcc()
+static void
+adc_generic(uint8_t admux, uint8_t *ret_num, uint16_t *ret_sum)
 {
     PRR &= ~_BV(PRADC);
     
@@ -829,7 +890,10 @@ adc_vcc()
     ADCSRA = _BV(ADEN) | _BV(ADPS2);
 
     // set to measure 1.1 reference
-    ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    ADMUX = admux;
+
+    // delay after setting reference etc, allow settling
+    long_delay(300);
     // average a number of samples
     uint16_t sum = 0;
     uint8_t num = 0;
@@ -850,6 +914,19 @@ adc_vcc()
     }
     ADCSRA = 0;
     PRR |= _BV(PRADC);
+
+    *ret_num = num;
+    *ret_sum = sum;
+}
+
+static uint16_t
+adc_vcc()
+{
+    const uint8_t mux = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    uint16_t sum;
+    uint8_t num;
+
+    adc_generic(mux, &num, &sum);
 
     //float res_volts = 1.1 * 1024 * num / sum;
     //return 1000 * res_volts;
@@ -861,35 +938,29 @@ adc_vcc()
 static uint16_t
 adc_5v(uint16_t vcc)
 {
-    PRR &= ~_BV(PRADC);
-    
-    // /16 prescaler
-    ADCSRA = _BV(ADEN) | _BV(ADPS2);
-
     // set to measure ADC4 against AVCC
-    ADMUX = _BV(REFS0) | _BV(MUX2);
-    // average a number of samples
-    uint16_t sum = 0;
-    uint8_t num = 0;
-    for (uint8_t n = 0; n < 20; n++)
-    {
-        ADCSRA |= _BV(ADSC);
-        loop_until_bit_is_clear(ADCSRA, ADSC);
+    const uint8_t mux = _BV(REFS0) | _BV(MUX2);
+    uint16_t sum;
+    uint8_t num;
+    
+    adc_generic(mux, &num, &sum);
 
-        uint8_t low_11 = ADCL;
-        uint8_t high_11 = ADCH;
-        uint16_t val = low_11 + (high_11 << 8);
+    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));
+}
 
-        if (n >= 4)
-        {
-            sum += val;
-            num++;
-        }
-    }
-    ADCSRA = 0;
-    PRR |= _BV(PRADC);
+static uint16_t
+adc_temp()
+{
+    // set to measure temperature against 1.1v reference.
+    const uint8_t mux = _BV(REFS0) | _BV(REFS1) | _BV(MUX3);
+    uint16_t sum;
+    uint8_t num;
+    
+    adc_generic(mux, &num, &sum);
 
-    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));;
+    // return the voltage
+
+    return ((uint32_t)1100*sum) / (num*1024);
 }
 
 static void
@@ -921,6 +992,7 @@ wait_reboot_pi()
 static void
 set_pi_boot_normal(uint8_t normal) 
 {
+    boot_normal_status = normal;
     PORT_PI_BOOT &= ~_BV(PIN_PI_BOOT);
     if (normal) 
     {
@@ -1016,13 +1088,13 @@ blink()
 }
 
 static void
-long_delay(int ms)
+long_delay(uint16_t ms)
 {
-    int iter = ms / 100;
+    uint16_t iter = ms / 10;
 
-    for (int i = 0; i < iter; i++)
+    for (uint16_t i = 0; i < iter; i++)
     {
-        _delay_ms(100);
+        _delay_ms(10);
     }
 }
 
@@ -1032,10 +1104,19 @@ ISR(BADISR_vect)
     printf_P(PSTR("Bad interrupt\n"));
 }
 
+// disable watchdog on boot
+void wdt_init(void) __attribute__((naked)) __attribute__((section(".init3")));
+void wdt_init(void)
+{
+    MCUSR = 0;
+    wdt_disable();
+}
+
 int main(void)
 {
     _Static_assert(F_CPU % 256 == 0, "clock prescaler remainder 0");
     _Static_assert(NEWBOOT_MAX < WATCHDOG_LONG_MIN, "newboot max shorter than watchdog min");
+    _Static_assert((F_CPU)%(16*(BAUD)) == 0, "baud rate good multiple");
 
     setup_chip();
     blink();
@@ -1043,7 +1124,8 @@ int main(void)
     stdout = &mystdout;
     uart_on();
 
-    printf_P(PSTR("Pi Watchdog\nMatt Johnston matt@ucc.asn.au"));
+    long_delay(500);
+    printf_P(PSTR("Pi Watchdog\nMatt Johnston matt@ucc.asn.au\n"));
 
     set_pi_boot_normal(0);
 
