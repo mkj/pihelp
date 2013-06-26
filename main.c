@@ -621,7 +621,8 @@ cmd_vcc()
 {
     uint16_t vcc = adc_vcc();
     uint16_t v5 = adc_5v(vcc);
-    printf_P(PSTR("vcc: %u mV\n5v: %u mV\n"), vcc, v5);
+    uint16_t r = adc_random();
+    printf_P(PSTR("vcc: %u mV\n5v: %u mV random %u\n"), vcc, v5, r);
 }
 
 static void
