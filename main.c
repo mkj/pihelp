@@ -16,6 +16,12 @@
 #include "hmac-sha1.h"
 #include "aes.h"
 
+#include "fat.h"
+#include "fat_config.h"
+#include "partition.h"
+#include "sd_raw.h"
+#include "sd_raw_config.h"
+
 //#include "simple_ds18b20.h"
 //#include "onewire.h"
 
@@ -35,7 +41,7 @@
 #define AESLEN 16
 #define KEYLEN HMACLEN
 
-#define BAUD 38400
+#define BAUD 115200
 #define UBRR ((F_CPU)/(16*(BAUD))-1)
 
 #define PORT_PI_BOOT PORTD
@@ -94,6 +100,8 @@ static uint32_t newboot_count;
 static uint32_t oneshot_count;
 // countdown after the warning.
 static uint8_t reboot_count;
+// set by adc completion interrupt
+static uint8_t adc_done;
 
 // ---- End atomic guards required
 
@@ -262,6 +270,56 @@ uart_putchar(char c, FILE *stream)
         UDR0 = '\n';
     }
     return (unsigned char)c;
+}
+
+uint8_t find_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name, struct fat_dir_entry_struct* dir_entry)
+{
+    while(fat_read_dir(dd, dir_entry))
+    {
+        if(strcmp(dir_entry->long_name, name) == 0)
+        {
+            fat_reset_dir(dd);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+struct fat_file_struct* 
+open_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name)
+{
+    struct fat_dir_entry_struct file_entry;
+    if(!find_file_in_dir(fs, dd, name, &file_entry))
+        return 0;
+
+    return fat_open_file(fs, &file_entry);
+}
+
+static void
+hmac_file(const char* fn)
+{
+    sd_raw_init();
+    struct partition_struct* partition = partition_open(sd_raw_read, sd_raw_read_interval, 0, 0, 0);
+    struct fat_fs_struct* fs = fat_open(partition);
+    struct fat_dir_entry_struct directory;
+    fat_get_dir_entry_of_path(fs, "/", &directory);
+
+    struct sd_raw_info disk_info;
+    sd_raw_get_info(&disk_info);
+    printf("diskinfo size %d", disk_info.capacity);
+
+    struct fat_dir_struct* dd = fat_open_dir(fs, &directory);
+    struct fat_file_struct* fd = open_file_in_dir(fs, dd, "fn");
+
+    char c = 0;
+    char buf[512];
+    for (int i = 0; i < 10; i++)
+    {
+        fat_read_file(fd, buf, sizeof(buf));
+        c ^= buf[0];
+    }
+    printf("total %d\n", c);
 }
 
 static void cmd_reset() __attribute__ ((noreturn));
@@ -584,13 +642,14 @@ cmd_vcc()
     uint16_t temp_deg = temp - 290;
     printf_P(PSTR("vcc: %u mV\n"
                     "5v: %u mV\n"
-                    "temp: %u mV (%dºC)\n"), 
+                    "temp: %u mV (%dºC)\n"
+                    ),
         vcc, v5, temp, temp_deg);
 }
 
-void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7e00;
 
-#if 0
+void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7800;
+
 #ifndef PROG_PASSWORD
 #define PROG_PASSWORD "Y2vvjxO5"
 #endif
@@ -625,7 +684,204 @@ cmd_prog(const char* arg)
 
     bootloader();
 }
-#endif
+
+
+static void
+adc_sleep()
+{
+    set_sleep_mode(SLEEP_MODE_IDLE);
+    sleep_mode();
+}
+
+#define BITSET(v, n) (((v) >> (n)) & 1)
+
+static inline uint8_t
+popcnt(uint8_t v)
+{
+    return BITSET(v, 0)
+        + BITSET(v, 1)
+        + BITSET(v, 2)
+        + BITSET(v, 3)
+        + BITSET(v, 4)
+        + BITSET(v, 5)
+        + BITSET(v, 6)
+        + BITSET(v, 7);
+}
+
+static uint8_t
+adc_bit()
+{
+    ADCSRA |= _BV(ADSC);
+    loop_until_bit_is_clear(ADCSRA, ADSC);
+    uint8_t low = ADCL;
+    uint8_t high = ADCH;
+    return (popcnt(low)&1) ^ (popcnt(high)&1);
+}
+
+static void
+adc_random(uint8_t admux, 
+    uint8_t *out, uint16_t num, uint32_t *tries)
+{
+    uint8_t ret = 0;
+    uint8_t count = 0;
+
+    PRR &= ~_BV(PRADC);
+    // /16 prescaler for 691mhz, no interrupt
+    ADCSRA = _BV(ADEN) | _BV(ADPS2);
+
+    *tries = 0;
+    for (int i = 0; i < num; i++)
+    {
+        while (count <= 7)
+        {
+            (*tries)++;
+
+            // Von Neumann extractor
+            uint8_t one = adc_bit();
+            uint8_t two = adc_bit();
+            if (one == two)
+            {
+                continue;
+            }
+            ret |= one << count;
+            count++;
+        }
+        out[i] = ret;
+    }
+    ADCSRA = 0;
+    PRR |= _BV(PRADC);
+}
+
+ISR(ADC_vect)
+{
+    adc_done = 1;
+}
+
+static void
+adc_generic(uint8_t admux, uint8_t *ret_num, uint16_t *ret_sum)
+{
+    PRR &= ~_BV(PRADC);
+    
+    // /64 prescaler, interrupt
+    ADCSRA = _BV(ADEN) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADIE);
+
+    // set to measure 1.1 reference
+    ADMUX = admux;
+
+    // delay after setting reference etc, allow settling
+    long_delay(300);
+    // average a number of samples
+    uint16_t sum = 0;
+    uint8_t num = 0;
+    for (uint8_t n = 0; n < 20; n++)
+    {
+        while (1)
+        {
+            adc_done = 0;
+            ADCSRA |= _BV(ADSC);
+            adc_sleep();
+
+            uint8_t done;
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+            {
+                done = adc_done;
+            }
+            if (done)
+            {
+                break;
+            }
+        }
+
+        uint8_t low_11 = ADCL;
+        uint8_t high_11 = ADCH;
+        uint16_t val = low_11 + (high_11 << 8);
+
+        if (n >= 4)
+        {
+            sum += val;
+            num++;
+        }
+    }
+    ADCSRA = 0;
+    PRR |= _BV(PRADC);
+
+    *ret_num = num;
+    *ret_sum = sum;
+}
+
+static uint16_t
+adc_vcc()
+{
+    const uint8_t mux = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    uint16_t sum;
+    uint8_t num;
+
+    adc_generic(mux, &num, &sum);
+
+    //float res_volts = 1.1 * 1024 * num / sum;
+    //return 1000 * res_volts;
+    return ((uint32_t)1100*1024*num) / sum;
+}
+
+#define SCALER_5V 2
+
+static uint16_t
+adc_5v(uint16_t vcc)
+{
+    // set to measure ADC4 against AVCC
+    const uint8_t mux = _BV(REFS0) | _BV(MUX2);
+    uint16_t sum;
+    uint8_t num;
+    
+    adc_generic(mux, &num, &sum);
+
+    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));
+}
+
+static uint16_t
+adc_temp()
+{
+    // set to measure temperature against 1.1v reference.
+    const uint8_t mux = _BV(REFS0) | _BV(REFS1) | _BV(MUX3);
+    uint16_t sum;
+    uint8_t num;
+    
+    adc_generic(mux, &num, &sum);
+
+    // return the voltage
+
+    return ((uint32_t)1100*sum) / (num*1024);
+}
+
+static void
+cmd_random(const char* params)
+{
+    uint8_t admux;
+    uint16_t num;
+    uint8_t buf[100];
+
+    int ret = sscanf_P(params, PSTR("%hhu %u"),
+        &admux, &num);
+    if (!ret)
+    {
+        printf_P(PSTR("Bad arguments\n"));
+        return;
+    }
+    uint32_t tries = 0;
+    printf_P(PSTR("output: "));
+    for (int i = 0; i < num; i+= sizeof(buf))
+    {
+        uint32_t t;
+        uint16_t nr = MIN(num-i, sizeof(buf));
+        adc_random(admux, buf, nr, &t);
+        printhex(buf, nr, stdout);
+        tries += t;
+    }
+    putchar('\n');
+    printf_P(PSTR("%ld tries\n"), tries);
+}
+
+
 
 static void
 read_handler()
@@ -644,9 +900,13 @@ read_handler()
     LOCAL_PSTR(newboot);
     LOCAL_PSTR(oldboot);
     LOCAL_PSTR(status);
+    LOCAL_PSTR(random);
+    LOCAL_PSTR(prog);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
+    LOCAL_HELP(prog, "<password>");
+    LOCAL_HELP(random, "<admux> <nbytes>");
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
 
@@ -666,8 +926,10 @@ read_handler()
         {decrypt_str, cmd_decrypt, decrypt_help},
         {set_params_str, cmd_set_params, set_params_help},
         {set_key_str, cmd_set_avr_key, set_key_help},
+        {random_str, cmd_random, random_help},
         {vcc_str, cmd_vcc, NULL},
         {reset_str, cmd_reset, NULL},
+        {prog_str, cmd_prog, prog_help},
     };
 
     if (readbuf[0] == '\0')
@@ -820,88 +1082,6 @@ idle_sleep()
 {
     set_sleep_mode(SLEEP_MODE_IDLE);
     sleep_mode();
-}
-
-static void
-adc_generic(uint8_t admux, uint8_t *ret_num, uint16_t *ret_sum)
-{
-    PRR &= ~_BV(PRADC);
-    
-    // /16 prescaler
-    ADCSRA = _BV(ADEN) | _BV(ADPS2);
-
-    // set to measure 1.1 reference
-    ADMUX = admux;
-
-    // delay after setting reference etc, allow settling
-    long_delay(300);
-    // average a number of samples
-    uint16_t sum = 0;
-    uint8_t num = 0;
-    for (uint8_t n = 0; n < 20; n++)
-    {
-        ADCSRA |= _BV(ADSC);
-        loop_until_bit_is_clear(ADCSRA, ADSC);
-
-        uint8_t low_11 = ADCL;
-        uint8_t high_11 = ADCH;
-        uint16_t val = low_11 + (high_11 << 8);
-
-        if (n >= 4)
-        {
-            sum += val;
-            num++;
-        }
-    }
-    ADCSRA = 0;
-    PRR |= _BV(PRADC);
-
-    *ret_num = num;
-    *ret_sum = sum;
-}
-
-static uint16_t
-adc_vcc()
-{
-    const uint8_t mux = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
-    uint16_t sum;
-    uint8_t num;
-
-    adc_generic(mux, &num, &sum);
-
-    //float res_volts = 1.1 * 1024 * num / sum;
-    //return 1000 * res_volts;
-    return ((uint32_t)1100*1024*num) / sum;
-}
-
-#define SCALER_5V 2
-
-static uint16_t
-adc_5v(uint16_t vcc)
-{
-    // set to measure ADC4 against AVCC
-    const uint8_t mux = _BV(REFS0) | _BV(MUX2);
-    uint16_t sum;
-    uint8_t num;
-    
-    adc_generic(mux, &num, &sum);
-
-    return ((uint32_t)vcc*sum*SCALER_5V/(num*1024));
-}
-
-static uint16_t
-adc_temp()
-{
-    // set to measure temperature against 1.1v reference.
-    const uint8_t mux = _BV(REFS0) | _BV(REFS1) | _BV(MUX3);
-    uint16_t sum;
-    uint8_t num;
-    
-    adc_generic(mux, &num, &sum);
-
-    // return the voltage
-
-    return ((uint32_t)1100*sum) / (num*1024);
 }
 
 static void

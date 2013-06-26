@@ -17,16 +17,18 @@
 #                   default_serial = "avrdoper"
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
-DEVICE     = atmega328
+DEVICE     = atmega328p
 PROGDEVICE     = atmega328p
-CLOCK      = 4915200L
+CLOCK      = 11059200L
 PROGRAMMER = #-c stk500v2 -P avrdoper
 PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
 SOURCE_CRYPTO = hmac-sha1.c sha1-asm.S aes.c
 SOURCE    = main.c
-SOURCE += $(SOURCE_CRYPTO)
-LIBS       = -lm
+SOURCE += $(SOURCE_CRYPTO) $(SOURCE_SD)
+LIBS       = 
+
+OBJECTS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SOURCE)))
 
 # default but 2mhz
 FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
@@ -71,6 +73,9 @@ FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
 
 
 # Tune the lines below only if you know what you are doing:
+
+SHELL := /bin/bash
+export PATH := $(PATH):/usr/local/CrossPack-AVR/bin/
 
 AVRDUDE = avrdude $(PROGRAMMER) 
 #COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -mcall-prologues -fdata-sections -ffunction-sections  -Wl,--gc-sections -Wl,--relax -fwhole-program  -Wl,-u,vfprintf -lprintf_flt -lm
