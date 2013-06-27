@@ -24,6 +24,7 @@ PROGRAMMER = #-c stk500v2 -P avrdoper
 PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
 SOURCE_CRYPTO = hmac-sha1.c sha1-asm.S aes.c
+SOURCE_SD = byteordering.c fat.c  partition.c sd_raw.c 
 SOURCE    = main.c
 SOURCE += $(SOURCE_CRYPTO) $(SOURCE_SD)
 LIBS       = 
@@ -78,8 +79,7 @@ SHELL := /bin/bash
 export PATH := $(PATH):/usr/local/CrossPack-AVR/bin/
 
 AVRDUDE = avrdude $(PROGRAMMER) 
-#COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -mcall-prologues -fdata-sections -ffunction-sections  -Wl,--gc-sections -Wl,--relax -fwhole-program  -Wl,-u,vfprintf -lprintf_flt -lm
-COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -Wl,-u,vfprintf -lprintf_flt -lm
+COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -mcall-prologues -fdata-sections -ffunction-sections  -Wl,--gc-sections -Wl,--relax -fwhole-program  -flto
 
 # symbolic targets:
 all:	main.hex
