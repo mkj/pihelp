@@ -691,11 +691,14 @@ void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7800;
 static void
 cmd_prog(const char* arg)
 {
-    if (safe_str_eq(arg, PROG_PASSWORD))
+    if (!safe_str_eq(arg, PROG_PASSWORD))
     {
         printf_P(PSTR("Bad prog password\n"));
         return;
     }
+
+    printf_P(PSTR("Programming...\n"));
+    long_delay(100);
 
     // disable wdt
     wdt_disable();
