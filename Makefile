@@ -103,6 +103,7 @@ flash:	all
 
 combined.hex: main.hex $(BOOTLOADER_HEX)
 	srec_cat main.hex -I $(BOOTLOADER_HEX) -I -o $@ -I
+	avr-objdump -h $@
 
 combo: combined.hex
 	$(AVRDUDE) -U flash:w:combined.hex:i
