@@ -330,6 +330,14 @@ uint8_t sd_raw_init()
     return 1;
 }
 
+void 
+sd_raw_deinit(void)
+{
+    configure_pin_mosi();
+    configure_pin_sck();
+    configure_pin_ss();
+}
+
 /**
  * \ingroup sd_raw
  * Checks wether a memory card is located in the slot.

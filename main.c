@@ -296,22 +296,65 @@ open_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char
     return fat_open_file(fs, &file_entry);
 }
 
+static uint32_t sd_serial = 0;
+static char conf_start[30];
+
 static void
 hmac_file(const char* fn)
 {
-    sd_raw_init();
+    uint8_t res;
     struct partition_struct* partition = partition_open(sd_raw_read, sd_raw_read_interval, 0, 0, 0);
+
+    if (!partition)
+    {
+        sprintf(conf_start, "part");
+        return;
+    }
+
     struct fat_fs_struct* fs = fat_open(partition);
+    if (!fs)
+    {
+        sprintf(conf_start, "bad fs");
+        return;
+    }
     struct fat_dir_entry_struct directory;
-    fat_get_dir_entry_of_path(fs, "/", &directory);
+    res = fat_get_dir_entry_of_path(fs, "/", &directory);
+    if (!res)
+    {
+        sprintf(conf_start, "bad direc");
+        return;
+    }
 
     struct sd_raw_info disk_info;
     sd_raw_get_info(&disk_info);
-    printf("diskinfo size %d", disk_info.capacity);
+    sd_serial = disk_info.serial;
 
     struct fat_dir_struct* dd = fat_open_dir(fs, &directory);
-    struct fat_file_struct* fd = open_file_in_dir(fs, dd, "fn");
+    if (!dd)
+    {
+        sprintf(conf_start, "bad dd");
+        return;
+    }
+    struct fat_file_struct* fd = open_file_in_dir(fs, dd, fn);
+    if (!fd)
+    {
+        sprintf(conf_start, "bad fd");
+        return;
+    }
 
+    fat_read_file(fd, conf_start, sizeof(conf_start)-1);
+    conf_start[sizeof(conf_start)-1] = '\0';
+
+    fat_close_file(fd);
+    fd = NULL;
+    fat_close_dir(dd);
+    dd = NULL;
+    fat_close(fs);
+    fs = NULL;
+    partition_close(partition);
+    partition = NULL;
+
+#if 0
     char c = 0;
     char buf[512];
     for (int i = 0; i < 10; i++)
@@ -320,6 +363,24 @@ hmac_file(const char* fn)
         c ^= buf[0];
     }
     printf("total %d\n", c);
+#endif
+}
+
+
+static void
+cmd_testsd(const char *param)
+{
+    PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
+    DDR_PI_RESET |= _BV(PIN_PI_RESET);
+    _delay_ms(200);
+
+    sd_raw_init();
+    hmac_file(param);
+    sd_raw_deinit();
+
+    _delay_ms(200);
+
+    DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
 }
 
 static void cmd_reset() __attribute__ ((noreturn));
@@ -379,13 +440,17 @@ cmd_status()
         "oneshot (%lu)\n"
         "uptime %lu rem %u\n"
         "boot normal %hhu\n"
+        "disk serial %lx\n"
+        "disk start '%s'\n"
         ),
         watchdog_long_limit, cur_watchdog_long, long_reboot_mode,
         watchdog_short_limit, cur_watchdog_short,
         newboot_limit, cur_newboot,
         cur_oneshot,
         t.ticks, t.rem,
-        boot_normal_status);
+        boot_normal_status,
+        sd_serial,
+        conf_start);
 }
 
 static void
@@ -945,6 +1010,7 @@ read_handler()
     LOCAL_PSTR(status);
     LOCAL_PSTR(random);
     LOCAL_PSTR(prog);
+    LOCAL_PSTR(testsd);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
@@ -952,6 +1018,7 @@ read_handler()
     LOCAL_HELP(random, "<admux> <nbytes>");
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
+    LOCAL_HELP(testsd, "<filename>");
 
     static const struct handler {
         PGM_P name;
@@ -973,6 +1040,7 @@ read_handler()
         {random_str, cmd_random, random_help},
         {vcc_str, cmd_vcc, NULL},
         {reset_str, cmd_reset, NULL},
+        {testsd_str, cmd_testsd, testsd_help},
         {prog_str, cmd_prog, prog_help},
     };
 
