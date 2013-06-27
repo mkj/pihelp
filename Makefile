@@ -28,6 +28,7 @@ SOURCE_SD = byteordering.c fat.c  partition.c sd_raw.c
 SOURCE    = main.c
 SOURCE += $(SOURCE_CRYPTO) $(SOURCE_SD)
 LIBS       = 
+BOOTLOADER_HEX = ATmegaBOOT_168_pihelp.hex
 
 OBJECTS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SOURCE)))
 
@@ -99,6 +100,12 @@ all:	main.hex
 
 flash:	all
 	$(AVRDUDE) -U flash:w:main.hex:i
+
+combined.hex: main.hex $(BOOTLOADER_HEX)
+	srec_cat main.hex -I $(BOOTLOADER_HEX) -I -o $@ -I
+
+combo: combined.hex
+	$(AVRDUDE) -U flash:w:combined.hex:i
 
 checkprog:	
 	$(AVRDUDE) -v 
