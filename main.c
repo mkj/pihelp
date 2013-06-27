@@ -422,6 +422,30 @@ cmd_set_params(const char *params)
     }
 }
 
+// returns 1 if they are equal, timing independent
+static uint8_t
+safe_mem_eq(const uint8_t *a, const uint8_t *b, int len)
+{
+    uint8_t result = 0;
+    for (int i = 0; i < len; i++)
+    {
+        result |= a[i] ^ b[i];
+    }
+    return result == 0;
+}
+
+// returns 1 if they are equal
+static uint8_t
+safe_str_eq(const char *a, const char *b)
+{
+    int la = strlen(a);
+    if (la != strlen(b))
+    {
+        return 0;
+    }
+    return safe_mem_eq((const uint8_t*)a, (const uint8_t*)b, la);
+}
+
 uint8_t from_hex(char c)
 {
     if (c >= '0' && c <= '9') {
@@ -558,7 +582,7 @@ cmd_decrypt(const char *params)
     memcpy(&output[2], &indata[HMACLEN], AESLEN);
     hmac_sha1(output, avr_keys[key_index], KEYLEN*8, output, (2+AESLEN)*8);
 
-    if (memcmp(output, indata, HMACLEN) != 0) {
+    if (!safe_mem_eq(output, indata, HMACLEN)) {
         printf_P(PSTR("FAIL: hmac mismatch\n"));
     }
 
@@ -633,6 +657,16 @@ cmd_alive()
 }
 
 static void
+cmd_poke()
+{
+    printf_P(PSTR("Ah, good.\n"));
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        watchdog_short_count = 0;
+    }
+}
+
+static void
 cmd_vcc()
 {
     uint16_t vcc = adc_vcc();
@@ -657,7 +691,7 @@ void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7800;
 static void
 cmd_prog(const char* arg)
 {
-    if (strcmp(arg, PROG_PASSWORD) != 0)
+    if (safe_str_eq(arg, PROG_PASSWORD))
     {
         printf_P(PSTR("Bad prog password\n"));
         return;
@@ -715,23 +749,26 @@ adc_bit()
     loop_until_bit_is_clear(ADCSRA, ADSC);
     uint8_t low = ADCL;
     uint8_t high = ADCH;
-    return (popcnt(low)&1) ^ (popcnt(high)&1);
+    uint8_t ret = (popcnt(low)&1) ^ (popcnt(high)&1);
+    return ret;
 }
 
 static void
 adc_random(uint8_t admux, 
     uint8_t *out, uint16_t num, uint32_t *tries)
 {
-    uint8_t ret = 0;
-    uint8_t count = 0;
-
     PRR &= ~_BV(PRADC);
     // /16 prescaler for 691mhz, no interrupt
     ADCSRA = _BV(ADEN) | _BV(ADPS2);
 
+    ADMUX = admux;
+
     *tries = 0;
     for (int i = 0; i < num; i++)
     {
+        uint8_t ret = 0;
+        uint8_t count = 0;
+
         while (count <= 7)
         {
             (*tries)++;
@@ -897,6 +934,7 @@ read_handler()
     LOCAL_PSTR(hmac);
     LOCAL_PSTR(decrypt);
     LOCAL_PSTR(alive);
+    LOCAL_PSTR(poke);
     LOCAL_PSTR(vcc);
     LOCAL_PSTR(reset);
     LOCAL_PSTR(newboot);
@@ -920,6 +958,7 @@ read_handler()
     } handlers[] PROGMEM = 
     {
         {alive_str, cmd_alive, NULL},
+        {poke_str, cmd_poke, NULL},
         {newboot_str, cmd_newboot, NULL},
         {oldboot_str, cmd_oldboot, NULL},
         {oneshot_str, cmd_oneshot_reboot, oneshot_help},

@@ -21,7 +21,7 @@ DEVICE     = atmega328p
 PROGDEVICE     = atmega328p
 CLOCK      = 11059200L
 PROGRAMMER = #-c stk500v2 -P avrdoper
-PROGRAMMER = -c stk500 -P ~/dev/stk500 -p $(PROGDEVICE)  -B 2
+PROGRAMMER = -c arduino -b 115200 -P /dev/ttyAMA0 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
 SOURCE_CRYPTO = hmac-sha1.c sha1-asm.S aes.c
 SOURCE_SD = byteordering.c fat.c  partition.c sd_raw.c 
@@ -36,14 +36,26 @@ OBJECTS := $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SOURCE)))
 FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
 
 #LOCKBIT
-# -U lock:w:0x28:m
+# prevent bootloader write protect:
+# -U lock:w:0x2f:m
 # 0  unused bit7
 # 0  unused
 # 1 blb12  no writing to bootloader
 # 0 blb11
-# 1 blb02  no writing to app
+# 1 blb02  bootloader can write to app
+# 1 blb01
+# 1 lb2           external serial prog unrestricted
+# 1 lb1 bit0
+
+# stop everything:
+# -U lock:w:0x20:m
+# 0  unused bit7
+# 0  unused
+# 1 blb12  no writing to bootloader
+# 0 blb11
+# 0 blb02  
 # 0 blb01
-# 0 lb2
+# 0 lb2            
 # 0 lb1 bit0
 
 # ATMega8 fuse bits used above (fuse bits for other devices are different!):
