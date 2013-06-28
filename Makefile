@@ -38,8 +38,8 @@ FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
 #LOCKBIT
 # prevent bootloader write protect:
 # -U lock:w:0x2f:m
-# 0  unused bit7
-# 0  unused
+# X  unused bit7
+# X  unused
 # 1 blb12  no writing to bootloader
 # 0 blb11
 # 1 blb02  bootloader can write to app
@@ -61,8 +61,8 @@ FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0x77:m -U efuse:w:0xfd:m
 # ATMega8 fuse bits used above (fuse bits for other devices are different!):
 # Example for 8 MHz internal oscillator
 # Fuse high byte:
-# 0xd9 = 1 1 0 1   1 0 0 1 <-- BOOTRST (boot reset vector at 0x0000)
-#        ^ ^ ^ ^   ^ ^ ^------ BOOTSZ0
+# 0xdb = 1 1 0 1   1 0 1 1 <-- BOOTRST (boot reset vector at 0x0000)
+#        ^ ^ ^ ^   ^ ^ ^------ BOOTSZ0 (2048 bytes bootloader)
 #        | | | |   | +-------- BOOTSZ1
 #        | | | |   +---------- EESAVE (set to 0 to preserve EEPROM over chip erase)
 #        | | | +-------------- WDTON

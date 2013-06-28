@@ -175,6 +175,8 @@ setup_chip()
 
     DDR_PI_WARNING |= _BV(PIN_PI_WARNING);
 
+    DDR_PI_RESET &= ~_BV(PIN_PI_RESET); 
+
 #if 0
     // set pullup
     PORTD |= _BV(PD2);
@@ -303,7 +305,13 @@ static void
 hmac_file(const char* fn)
 {
     uint8_t res;
-    struct partition_struct* partition = partition_open(sd_raw_read, sd_raw_read_interval, 0, 0, 0);
+
+    struct sd_raw_info disk_info;
+    sd_raw_get_info(&disk_info);
+    sd_serial = disk_info.serial;
+    printf_P(PSTR("serial %lx\n"), sd_serial);
+
+    struct partition_struct* partition = partition_open(sd_raw_read, sd_raw_read_interval, sd_raw_write, sd_raw_write_interval, 1);
 
     if (!partition)
     {
@@ -325,10 +333,6 @@ hmac_file(const char* fn)
         return;
     }
 
-    struct sd_raw_info disk_info;
-    sd_raw_get_info(&disk_info);
-    sd_serial = disk_info.serial;
-
     struct fat_dir_struct* dd = fat_open_dir(fs, &directory);
     if (!dd)
     {
@@ -342,7 +346,7 @@ hmac_file(const char* fn)
         return;
     }
 
-    fat_read_file(fd, conf_start, sizeof(conf_start)-1);
+    fat_read_file(fd, (uint8_t*)conf_start, sizeof(conf_start)-1);
     conf_start[sizeof(conf_start)-1] = '\0';
 
     fat_close_file(fd);
@@ -372,13 +376,17 @@ cmd_testsd(const char *param)
 {
     PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
     DDR_PI_RESET |= _BV(PIN_PI_RESET);
-    _delay_ms(200);
+    long_delay(200);
+
+    printf_P(PSTR("about to raw init\n"));
 
     sd_raw_init();
+    printf_P(PSTR("done raw init\n"));
     hmac_file(param);
+    printf_P(PSTR("conf_start '%s'\n"), conf_start);
     sd_raw_deinit();
 
-    _delay_ms(200);
+    long_delay(200);
 
     DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
 }
@@ -767,6 +775,7 @@ cmd_prog(const char* arg)
 
     // disable wdt
     wdt_disable();
+    MCUSR = 0;
 
     // disable interrupts
     TIMSK0 = 0;
@@ -1010,7 +1019,6 @@ read_handler()
     LOCAL_PSTR(status);
     LOCAL_PSTR(random);
     LOCAL_PSTR(prog);
-    LOCAL_PSTR(testsd);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
@@ -1018,7 +1026,6 @@ read_handler()
     LOCAL_HELP(random, "<admux> <nbytes>");
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
-    LOCAL_HELP(testsd, "<filename>");
 
     static const struct handler {
         PGM_P name;
@@ -1040,7 +1047,6 @@ read_handler()
         {random_str, cmd_random, random_help},
         {vcc_str, cmd_vcc, NULL},
         {reset_str, cmd_reset, NULL},
-        {testsd_str, cmd_testsd, testsd_help},
         {prog_str, cmd_prog, prog_help},
     };
 
@@ -1234,7 +1240,6 @@ set_pi_boot_normal(uint8_t normal)
     {
         // pull it low
         DDR_PI_RESET |= _BV(PIN_PI_BOOT);
-
     }
 }
 

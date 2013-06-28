@@ -2992,7 +2992,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{642.06523940822649, 195.79799294748042}, {55, 20}}</string>
+			<string>{{650.50931573509411, 202.59816909112666}, {55, 20}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -3017,8 +3017,10 @@
 			<dict>
 				<key>ID</key>
 				<integer>1450</integer>
+				<key>Offset</key>
+				<real>-6.8001761436462402</real>
 				<key>Position</key>
-				<real>0.85406345129013062</real>
+				<real>0.088183894753456116</real>
 				<key>RotationType</key>
 				<integer>0</integer>
 			</dict>
@@ -3026,6 +3028,11 @@
 			<string>Rectangle</string>
 			<key>Style</key>
 			<dict>
+				<key>fill</key>
+				<dict>
+					<key>Draws</key>
+					<string>NO</string>
+				</dict>
 				<key>shadow</key>
 				<dict>
 					<key>Draws</key>
@@ -3053,18 +3060,25 @@
 		<dict>
 			<key>Class</key>
 			<string>LineGraphic</string>
+			<key>Head</key>
+			<dict>
+				<key>ID</key>
+				<integer>1364</integer>
+				<key>Info</key>
+				<integer>5</integer>
+			</dict>
 			<key>ID</key>
 			<integer>1450</integer>
 			<key>OrthogonalBarAutomatic</key>
-			<true/>
+			<false/>
 			<key>OrthogonalBarPoint</key>
 			<string>{0, 0}</string>
 			<key>OrthogonalBarPosition</key>
-			<real>-1</real>
+			<real>45.686443328857422</real>
 			<key>Points</key>
 			<array>
 				<string>{702.24511708341549, 205.79799294748042}</string>
-				<string>{664.69325875965797, 206.76329169224098}</string>
+				<string>{584.76111409893213, 365.24458410714874}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -29416,7 +29430,7 @@ A\
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-06-27 11:14:51 +0000</string>
+	<string>2013-06-28 03:15:20 +0000</string>
 	<key>Modifier</key>
 	<string>Matt</string>
 	<key>NotesVisible</key>
@@ -29521,7 +29535,7 @@ A\
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{161.35266220843107, 0}, {918.84060934262232, 604.83093738010689}}</string>
+		<string>{{180.19324252618199, 12.077295075481366}, {918.84060934262232, 604.83093738010677}}</string>
 		<key>Zoom</key>
 		<real>1.0349999666213989</real>
 		<key>ZoomValues</key>
