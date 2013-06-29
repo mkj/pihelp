@@ -85,9 +85,10 @@ extern "C"
     #define configure_pin_ss() DDRB |= (1 << DDB2)
     #define configure_pin_miso() DDRB &= ~(1 << DDB4)
 
-    #define deonfigure_pin_mosi() DDRB &= ~(1 << DDB3)
-    #define deonfigure_pin_sck() DDRB &= ~(1 << DDB5)
-    #define deonfigure_pin_ss() DDRB &= ~(1 << DDB2)
+    #define deconfigure_pin_mosi() DDRB &= ~(1 << DDB3)
+    #define deconfigure_pin_sck() DDRB &= ~(1 << DDB5)
+    #define deconfigure_pin_ss() DDRB &= ~(1 << DDB2)
+
 
     #define select_card() PORTB &= ~(1 << PORTB2)
     #define unselect_card() PORTB |= (1 << PORTB2)

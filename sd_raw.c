@@ -10,6 +10,9 @@
 
 #include <string.h>
 #include <avr/io.h>
+#include <util/delay.h>
+#include <avr/pgmspace.h>
+#include <stdio.h>
 #include "sd_raw.h"
 
 /**
@@ -163,6 +166,8 @@ static void sd_raw_send_byte(uint8_t b);
 static uint8_t sd_raw_rec_byte();
 static uint8_t sd_raw_send_command(uint8_t command, uint32_t arg);
 
+static uint8_t orig_pb;
+
 /**
  * \ingroup sd_raw
  * Initializes memory card communication.
@@ -174,6 +179,15 @@ uint8_t sd_raw_init()
     /* enable inputs for reading card status */
     configure_pin_available();
     configure_pin_locked();
+
+    orig_pb = PORTB;
+
+    printf_P(PSTR("startup portb %hhx mosi %d, sck %d, ss, miso %d\n"),
+        PORTB,
+        orig_pb & _BV(PB3),
+        orig_pb & _BV(PB5),
+        orig_pb & _BV(PB2),
+        orig_pb & _BV(PB4));
 
     /* enable outputs for MOSI, SCK, SS, input for MISO */
     configure_pin_mosi();
@@ -333,9 +347,49 @@ uint8_t sd_raw_init()
 void 
 sd_raw_deinit(void)
 {
-    configure_pin_mosi();
-    configure_pin_sck();
-    configure_pin_ss();
+
+    printf_P(PSTR("deinit mosi %d, sck %d, ss, miso %d\n"),
+        PORTB & _BV(PB3),
+        PORTB & _BV(PB5),
+        PORTB & _BV(PB2),
+        PORTB & _BV(PB4));
+
+    // set to slave mode
+    SPCR = (0 << SPIE) | /* SPI Interrupt Enable */
+           (1 << SPE)  | /* SPI Enable */
+           (0 << DORD) | /* Data Order: MSB first */
+           (0 << MSTR) | /* Master mode */
+           (0 << CPOL) | /* Clock Polarity: SCK low when idle */
+           (0 << CPHA) | /* Clock Phase: sample on rising SCK edge */
+           (1 << SPR1) | /* Clock Frequency: f_OSC / 128 */
+           (1 << SPR0);
+
+    _delay_ms(15);
+
+    // disable it
+    SPCR = (0 << SPIE) | /* SPI Interrupt Enable */
+           (0 << SPE)  | /* SPI Enable */
+           (0 << DORD) | /* Data Order: MSB first */
+           (0 << MSTR) | /* Master mode */
+           (0 << CPOL) | /* Clock Polarity: SCK low when idle */
+           (0 << CPHA) | /* Clock Phase: sample on rising SCK edge */
+           (1 << SPR1) | /* Clock Frequency: f_OSC / 128 */
+           (1 << SPR0);
+
+    _delay_ms(15);
+
+    uint8_t pb_mask = _BV(PB3) | _BV(PB5) | _BV(PB2);
+    printf_P(PSTR("PORTB was %hhx\n"),
+        PORTB);
+    PORTB = (PORTB & ~pb_mask) | (orig_pb & pb_mask);
+    printf_P(PSTR("PORTB now %hhx\n"),
+        PORTB);
+
+    _delay_ms(15);
+
+    deconfigure_pin_mosi();
+    deconfigure_pin_sck();
+    deconfigure_pin_ss();
 }
 
 /**
