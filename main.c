@@ -13,6 +13,8 @@
 #include <util/atomic.h>
 #include <util/crc16.h>
 
+#include "buildid.h"
+
 #include "hmac-sha1.h"
 #include "aes.h"
 
@@ -40,6 +42,8 @@
 #define HMACLEN 20
 #define AESLEN 16
 #define KEYLEN HMACLEN
+// 64 bits is enough for a realtime challenge
+#define CHALLEN 8
 
 #define BAUD 115200
 #define UBRR ((F_CPU)/(16*(BAUD))-1)
@@ -120,6 +124,9 @@ static uint8_t boot_normal_status;
 // command
 static uint8_t long_reboot_mode = 0;
 
+static uint8_t boot_id_set = 0;
+static uint8_t boot_id[HMACLEN];
+
 static uint8_t readpos;
 static char readbuf[150];
 static uint8_t have_cmd;
@@ -131,7 +138,8 @@ static uint16_t adc_vcc();
 static uint16_t adc_5v(uint16_t vcc);
 static uint16_t adc_temp();
 static void set_pi_boot_normal(uint8_t normal);
-
+static void adc_random(uint8_t admux,
+    uint8_t *out, uint16_t num, uint32_t *tries);
 
 static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
         _FDEV_SETUP_WRITE);
@@ -274,6 +282,8 @@ uart_putchar(char c, FILE *stream)
     return (unsigned char)c;
 }
 
+#if 0
+
 uint8_t find_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name, struct fat_dir_entry_struct* dir_entry)
 {
     while(fat_read_dir(dd, dir_entry))
@@ -374,6 +384,7 @@ hmac_file(const char* fn)
 static void
 cmd_testsd(const char *param)
 {
+    boot_id_set = 0;
     PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
     DDR_PI_RESET |= _BV(PIN_PI_RESET);
     long_delay(200);
@@ -390,13 +401,14 @@ cmd_testsd(const char *param)
 
     DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
 }
+#endif 
 
 static void cmd_reset() __attribute__ ((noreturn));
 static void
 cmd_reset()  
 {
     printf_P(PSTR("reset\n"));
-    _delay_ms(100);
+    long_delay(100);
     cli(); // disable interrupts 
     wdt_enable(WDTO_15MS); // enable watchdog 
     while(1); // wait for watchdog to reset processor 
@@ -448,17 +460,13 @@ cmd_status()
         "oneshot (%lu)\n"
         "uptime %lu rem %u\n"
         "boot normal %hhu\n"
-        "disk serial %lx\n"
-        "disk start '%s'\n"
         ),
         watchdog_long_limit, cur_watchdog_long, long_reboot_mode,
         watchdog_short_limit, cur_watchdog_short,
         newboot_limit, cur_newboot,
         cur_oneshot,
         t.ticks, t.rem,
-        boot_normal_status,
-        sd_serial,
-        conf_start);
+        boot_normal_status);
 }
 
 static void
@@ -744,6 +752,44 @@ cmd_vcc()
         vcc, v5, temp, temp_deg);
 }
 
+static void
+get_random(uint8_t *out)
+{
+    uint32_t tries;
+    uint8_t rnd[20];
+    adc_random(0x44, rnd, sizeof(rnd), &tries);
+    hmac_sha1(out, buildid, sizeof(buildid)*8, rnd, sizeof(rnd)*8);
+}
+
+static void
+cmd_bootid(const char *arg)
+{
+    uint8_t hmac[HMACLEN];
+    uint8_t input[CHALLEN+sizeof(boot_id)];
+
+    if (strlen(arg) != CHALLEN*2)
+    {
+        printf_P(PSTR("Bad challenge\n"));
+    }
+    for (int i = 0, p = 0; i < CHALLEN; i++, p += 2)
+    {
+        input[i] = (from_hex(arg[p]) << 4) | from_hex(arg[p+1]);
+    }
+    memcpy(&input[CHALLEN], boot_id, sizeof(boot_id));
+
+    if (!boot_id_set)
+    {
+        _Static_assert(sizeof(boot_id) == HMACLEN, "boot_id size correct");
+        get_random(boot_id);
+        boot_id_set = 1;
+    }
+    hmac_sha1(hmac, avr_keys[0], KEYLEN*8, input, sizeof(input)*8);
+    printf_P(PSTR("bootid: "));
+    printhex(boot_id, sizeof(boot_id), stdout);
+    putchar(' ');
+    printhex(hmac, sizeof(hmac), stdout);
+    putchar('\n');
+}
 
 void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7800;
 
@@ -1009,7 +1055,7 @@ read_handler()
     LOCAL_PSTR(status);
     LOCAL_PSTR(random);
     LOCAL_PSTR(prog);
-    LOCAL_PSTR(testsd);
+    LOCAL_PSTR(bootid);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
@@ -1017,7 +1063,7 @@ read_handler()
     LOCAL_HELP(random, "<admux> <nbytes>");
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
-    LOCAL_HELP(testsd, "<filename>");
+    LOCAL_HELP(bootid, "<8_byte_challenge>")
 
     static const struct handler {
         PGM_P name;
@@ -1039,8 +1085,8 @@ read_handler()
         {random_str, cmd_random, random_help},
         {vcc_str, cmd_vcc, NULL},
         {reset_str, cmd_reset, NULL},
-        {testsd_str, cmd_testsd, testsd_help},
         {prog_str, cmd_prog, prog_help},
+        {bootid_str, cmd_bootid, bootid_help},
     };
 
     if (readbuf[0] == '\0')
@@ -1101,7 +1147,7 @@ read_handler()
 ISR(INT0_vect)
 {
     blink();
-    _delay_ms(100);
+    long_delay(100);
     blink();
 }
 
@@ -1199,10 +1245,11 @@ static void
 reboot_pi()
 {
     printf_P(PSTR("Real reboot now\n"));
+    boot_id_set = 0;
     // pull it low for 200ms
     PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
     DDR_PI_RESET |= _BV(PIN_PI_RESET);
-    _delay_ms(200);
+    long_delay(200);
 	
 	PORT_PI_WARNING &= ~_BV(PIN_PI_WARNING);
     DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	

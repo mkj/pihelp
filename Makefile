@@ -25,7 +25,7 @@ PROGRAMMER = -c arduino -b 115200 -P /dev/ttyAMA0 -p $(PROGDEVICE)  -B 2
 SOURCE_1WIRE = onewire.c simple_ds18b20.c crc8.c
 SOURCE_CRYPTO = hmac-sha1.c sha1-asm.S aes.c
 SOURCE_SD = byteordering.c fat.c  partition.c sd_raw.c 
-SOURCE    = main.c
+SOURCE    = main.c buildid.c
 SOURCE += $(SOURCE_CRYPTO) $(SOURCE_SD)
 LIBS       = 
 BOOTLOADER_HEX = ATmegaBOOT_168_pihelp.hex
@@ -96,6 +96,12 @@ COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -g -std=c99 -mcall-
 
 # symbolic targets:
 all:	main.hex
+
+.PHONY: buildid.c
+
+buildid.c:
+	echo "#include \"buildid.h\"" > $@
+	echo "uint8_t buildid[20] = { `dd if=/dev/urandom bs=20 count=1 2> /dev/null | hexdump -e '20/1 "0x%02x, "' ` };" >> $@
 
 .c.o:
 	$(COMPILE) -c $< -o $@
