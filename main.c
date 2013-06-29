@@ -16,6 +16,12 @@
 #include "hmac-sha1.h"
 #include "aes.h"
 
+#include "fat.h"
+#include "fat_config.h"
+#include "partition.h"
+#include "sd_raw.h"
+#include "sd_raw_config.h"
+
 //#include "simple_ds18b20.h"
 //#include "onewire.h"
 
@@ -268,6 +274,123 @@ uart_putchar(char c, FILE *stream)
     return (unsigned char)c;
 }
 
+uint8_t find_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name, struct fat_dir_entry_struct* dir_entry)
+{
+    while(fat_read_dir(dd, dir_entry))
+    {
+        if(strcmp(dir_entry->long_name, name) == 0)
+        {
+            fat_reset_dir(dd);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+struct fat_file_struct* 
+open_file_in_dir(struct fat_fs_struct* fs, struct fat_dir_struct* dd, const char* name)
+{
+    struct fat_dir_entry_struct file_entry;
+    if(!find_file_in_dir(fs, dd, name, &file_entry))
+        return 0;
+
+    return fat_open_file(fs, &file_entry);
+}
+
+static uint32_t sd_serial = 0;
+static char conf_start[30];
+
+static void
+hmac_file(const char* fn)
+{
+    uint8_t res;
+
+    struct sd_raw_info disk_info;
+    sd_raw_get_info(&disk_info);
+    sd_serial = disk_info.serial;
+    printf_P(PSTR("serial %lx\n"), sd_serial);
+
+    struct partition_struct* partition = partition_open(sd_raw_read, sd_raw_read_interval, sd_raw_write, sd_raw_write_interval, 1);
+
+    if (!partition)
+    {
+        sprintf(conf_start, "part");
+        return;
+    }
+
+    struct fat_fs_struct* fs = fat_open(partition);
+    if (!fs)
+    {
+        sprintf(conf_start, "bad fs");
+        return;
+    }
+    struct fat_dir_entry_struct directory;
+    res = fat_get_dir_entry_of_path(fs, "/", &directory);
+    if (!res)
+    {
+        sprintf(conf_start, "bad direc");
+        return;
+    }
+
+    struct fat_dir_struct* dd = fat_open_dir(fs, &directory);
+    if (!dd)
+    {
+        sprintf(conf_start, "bad dd");
+        return;
+    }
+    struct fat_file_struct* fd = open_file_in_dir(fs, dd, fn);
+    if (!fd)
+    {
+        sprintf(conf_start, "bad fd");
+        return;
+    }
+
+    fat_read_file(fd, (uint8_t*)conf_start, sizeof(conf_start)-1);
+    conf_start[sizeof(conf_start)-1] = '\0';
+
+    fat_close_file(fd);
+    fd = NULL;
+    fat_close_dir(dd);
+    dd = NULL;
+    fat_close(fs);
+    fs = NULL;
+    partition_close(partition);
+    partition = NULL;
+
+#if 0
+    char c = 0;
+    char buf[512];
+    for (int i = 0; i < 10; i++)
+    {
+        fat_read_file(fd, buf, sizeof(buf));
+        c ^= buf[0];
+    }
+    printf("total %d\n", c);
+#endif
+}
+
+
+static void
+cmd_testsd(const char *param)
+{
+    PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
+    DDR_PI_RESET |= _BV(PIN_PI_RESET);
+    long_delay(200);
+
+    printf_P(PSTR("about to raw init\n"));
+
+    sd_raw_init();
+    printf_P(PSTR("done raw init\n"));
+    hmac_file(param);
+    printf_P(PSTR("conf_start '%s'\n"), conf_start);
+    sd_raw_deinit();
+
+    long_delay(200);
+
+    DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
+}
+
 static void cmd_reset() __attribute__ ((noreturn));
 static void
 cmd_reset()  
@@ -325,14 +448,17 @@ cmd_status()
         "oneshot (%lu)\n"
         "uptime %lu rem %u\n"
         "boot normal %hhu\n"
+        "disk serial %lx\n"
+        "disk start '%s'\n"
         ),
         watchdog_long_limit, cur_watchdog_long, long_reboot_mode,
         watchdog_short_limit, cur_watchdog_short,
         newboot_limit, cur_newboot,
         cur_oneshot,
         t.ticks, t.rem,
-        boot_normal_status
-        );
+        boot_normal_status,
+        sd_serial,
+        conf_start);
 }
 
 static void
@@ -883,6 +1009,7 @@ read_handler()
     LOCAL_PSTR(status);
     LOCAL_PSTR(random);
     LOCAL_PSTR(prog);
+    LOCAL_PSTR(testsd);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
@@ -890,6 +1017,7 @@ read_handler()
     LOCAL_HELP(random, "<admux> <nbytes>");
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
+    LOCAL_HELP(testsd, "<filename>");
 
     static const struct handler {
         PGM_P name;
@@ -911,6 +1039,7 @@ read_handler()
         {random_str, cmd_random, random_help},
         {vcc_str, cmd_vcc, NULL},
         {reset_str, cmd_reset, NULL},
+        {testsd_str, cmd_testsd, testsd_help},
         {prog_str, cmd_prog, prog_help},
     };
 
