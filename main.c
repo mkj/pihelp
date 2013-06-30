@@ -766,6 +766,13 @@ cmd_bootid(const char *arg)
 {
     uint8_t hmac[HMACLEN];
     uint8_t input[CHALLEN+sizeof(boot_id)];
+    
+    if (!boot_id_set)
+    {
+        _Static_assert(sizeof(boot_id) == HMACLEN, "boot_id size correct");
+        get_random(boot_id);
+        boot_id_set = 1;
+    }
 
     if (strlen(arg) != CHALLEN*2)
     {
@@ -777,12 +784,6 @@ cmd_bootid(const char *arg)
     }
     memcpy(&input[CHALLEN], boot_id, sizeof(boot_id));
 
-    if (!boot_id_set)
-    {
-        _Static_assert(sizeof(boot_id) == HMACLEN, "boot_id size correct");
-        get_random(boot_id);
-        boot_id_set = 1;
-    }
     hmac_sha1(hmac, avr_keys[0], KEYLEN*8, input, sizeof(input)*8);
     printf_P(PSTR("bootid: "));
     printhex(boot_id, sizeof(boot_id), stdout);
@@ -793,14 +794,19 @@ cmd_bootid(const char *arg)
 
 void(*bootloader)() __attribute__ ((noreturn)) = (void*)0x7800;
 
-#ifndef PROG_PASSWORD
-#define PROG_PASSWORD "Y2vvjxO5"
-#endif
-
 static void
 cmd_prog(const char* arg)
 {
-    if (!safe_str_eq(arg, PROG_PASSWORD))
+    uint8_t pw_hmac[HMACLEN];
+    uint8_t good_hmac[HMACLEN];
+
+    const static char prog_hmac[HMACLEN] PROGMEM = {
+        0x73, 0x4d, 0xa6, 0x3f, 0x3b, 0x7e, 0x4d, 0xa4, 0x65, 0xae, 0xea, 0xf9, 0x19, 0xbc, 0x4f, 0x45, 0xa7, 0x8d, 0x5a, 0xce, 
+    };
+
+    memcpy_P(good_hmac, prog_hmac, HMACLEN);
+    hmac_sha1(pw_hmac, arg, strlen(arg)*8, "pihelp", strlen("pihelp")*8);
+    if (!safe_mem_eq(pw_hmac, good_hmac, HMACLEN))
     {
         printf_P(PSTR("Bad prog password\n"));
         return;
