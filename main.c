@@ -37,13 +37,14 @@
 // to be a multiple.
 
 #define TICK 1
-#define SLEEP_COMPARE (F_CPU/256)   // == 19200 for 4915200mhz
+#define SLEEP_COMPARE (F_CPU/1024)   // == 10800 for 11059200hz
 #define NKEYS 10
 #define HMACLEN 20
 #define AESLEN 16
 #define KEYLEN HMACLEN
 // 64 bits is enough for a realtime challenge
 #define CHALLEN 8
+#define HMAC_PRINT_LEN 3
 
 #define BAUD 115200
 #define UBRR ((F_CPU)/(16*(BAUD))-1)
@@ -89,7 +90,7 @@ static uint32_t watchdog_long_limit = WATCHDOG_LONG_DEFAULT;
 static uint32_t watchdog_short_limit = 0;
 static uint32_t newboot_limit = NEWBOOT_DEFAULT;
 
-// avr proves itself
+// key index 0 is special, used internally for bootid
 static uint8_t avr_keys[NKEYS][KEYLEN] = {{0}};
 
 // ---- Atomic guards required accessing these variables
@@ -124,7 +125,6 @@ static uint8_t boot_normal_status;
 // command
 static uint8_t long_reboot_mode = 0;
 
-static uint8_t boot_id_set = 0;
 static uint8_t boot_id[HMACLEN];
 
 static uint8_t readpos;
@@ -140,9 +140,19 @@ static uint16_t adc_temp();
 static void set_pi_boot_normal(uint8_t normal);
 static void adc_random(uint8_t admux,
     uint8_t *out, uint16_t num, uint32_t *tries);
+void printhex(uint8_t *id, uint8_t n, FILE *stream);
+static void cmd_rebootpi();
 
+uint8_t uart_hmac_print;
+uint32_t uart_hmac_counter;
+hmac_sha1_ctx_t uart_hmac_ctx;
+uint8_t uart_hmac_buf[SHA1_BLOCK_BITS/8];
+uint8_t uart_hmac_index;
 static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
         _FDEV_SETUP_WRITE);
+static FILE _rawstdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
+        _FDEV_SETUP_WRITE);
+static FILE *raw_stdout = &_rawstdout;
 
 // thanks to http://projectgus.com/2010/07/eeprom-access-with-arduino/
 #define eeprom_read_to(dst_p, eeprom_field, dst_size) eeprom_read_block((dst_p), (void *)offsetof(struct __eeprom_data, eeprom_field), (dst_size))
@@ -228,8 +238,8 @@ setup_tick_counter()
     // systemclock/8
     TCCR1B = _BV(CS11);
 #else
-    // systemclock/256
-    TCCR1B = _BV(CS12);
+    // systemclock/1024
+    TCCR1B = _BV(CS12) | _BV(CS10);
 #endif
     TCNT1 = 0;
     OCR1A = SLEEP_COMPARE;
@@ -258,9 +268,75 @@ static uint8_t sim_idx = 0;
 static uint8_t last_sim_idx = 0;
 #endif
 
+static void
+reset_uart_hmac(void)
+{
+    uart_hmac_counter++;
+    uint8_t key[KEYLEN + sizeof(boot_id) + sizeof(uart_hmac_counter)];
+    uint8_t *k = key;
+    memcpy(k, avr_keys[0], KEYLEN);
+    k += KEYLEN;
+    memcpy(k, boot_id, sizeof(boot_id));
+    k += sizeof(boot_id);
+    memcpy(k, &uart_hmac_counter, sizeof(uart_hmac_counter));
+
+    hmac_sha1_init(&uart_hmac_ctx, key, 8*sizeof(key));
+    uart_hmac_index = 0;
+}
+
+static void
+uart_hmac(char c)
+{
+    if (c == '\r' || c == '\n')
+    {
+        hmac_sha1_lastBlock(&uart_hmac_ctx, uart_hmac_buf, 8*uart_hmac_index);
+        uint8_t hmac_out[HMACLEN];
+        hmac_sha1_final(hmac_out, &uart_hmac_ctx);
+
+        if (uart_hmac_print)
+        {
+            fputc(' ', raw_stdout);
+            printhex((uint8_t*)&uart_hmac_counter, sizeof(uart_hmac_counter), raw_stdout);
+            fputc(' ', raw_stdout);
+            printhex(hmac_out, HMAC_PRINT_LEN, raw_stdout);
+        }
+
+        reset_uart_hmac();
+
+        return;
+    }
+
+    if (uart_hmac_index == sizeof(uart_hmac_buf))
+    {
+        hmac_sha1_nextBlock(&uart_hmac_ctx, uart_hmac_buf);
+        uart_hmac_index = 0;
+    }
+
+    uart_hmac_buf[uart_hmac_index] = c;
+    uart_hmac_index++;
+}
+
+static void
+cmd_printhmac(const char *arg)
+{
+    uart_hmac_print = (strtoul(arg, NULL, 10) != 0);
+    if (uart_hmac_print)
+    {
+        printf_P(PSTR("hmac printing on\n"));
+    } 
+    else 
+    {
+        printf_P(PSTR("hmac printing off\n"));
+    }
+}
+
 int 
 uart_putchar(char c, FILE *stream)
 {
+    if (stream != raw_stdout)
+    {
+        uart_hmac(c);
+    }
     // XXX could perhaps sleep in the loop for power.
     if (c == '\n')
     {
@@ -631,6 +707,12 @@ cmd_hmac(const char *params)
         return;
     }
 
+    if (key_index == 0)
+    {
+        printf_P(PSTR("Can't use key index 0\n"));
+        return;
+    }
+
 #ifndef SIM_DEBUG
     long_delay(200);
 #endif
@@ -650,6 +732,12 @@ cmd_decrypt(const char *params)
     if (parse_key(params, &key_index, indata, sizeof(indata)) != 0)
     {
         printf_P(PSTR("FAIL: Bad input\n"));
+        return;
+    }
+
+    if (key_index == 0)
+    {
+        printf_P(PSTR("Can't use key index 0\n"));
         return;
     }
 
@@ -762,18 +850,19 @@ get_random(uint8_t *out)
 }
 
 static void
+cmd_newbootid()
+{
+    get_random(boot_id);
+    reset_uart_hmac();
+    printf_P(PSTR("bootid cleared\n"));
+}
+
+static void
 cmd_bootid(const char *arg)
 {
     uint8_t hmac[HMACLEN];
     uint8_t input[CHALLEN+sizeof(boot_id)];
     
-    if (!boot_id_set)
-    {
-        _Static_assert(sizeof(boot_id) == HMACLEN, "boot_id size correct");
-        get_random(boot_id);
-        boot_id_set = 1;
-    }
-
     if (strlen(arg) != CHALLEN*2)
     {
         printf_P(PSTR("Bad challenge\n"));
@@ -1062,6 +1151,9 @@ read_handler()
     LOCAL_PSTR(random);
     LOCAL_PSTR(prog);
     LOCAL_PSTR(bootid);
+    LOCAL_PSTR(newbootid);
+    LOCAL_PSTR(rebootpi);
+    LOCAL_PSTR(printhmac);
     LOCAL_HELP(set_params, "<long_limit> <short_limit> <newboot_limit>");
     LOCAL_HELP(set_key, "20_byte_hex>");
     LOCAL_HELP(oneshot, "<timeout>");
@@ -1070,6 +1162,7 @@ read_handler()
     LOCAL_HELP(hmac, "<key_index> <20_byte_hex_data>");
     LOCAL_HELP(decrypt, "<key_index> <20_byte_hmac|16_byte_aes_block>");
     LOCAL_HELP(bootid, "<8_byte_challenge>")
+    LOCAL_HELP(printhmac, "<0|1>")
 
     static const struct handler {
         PGM_P name;
@@ -1091,8 +1184,11 @@ read_handler()
         {random_str, cmd_random, random_help},
         {vcc_str, cmd_vcc, NULL},
         {reset_str, cmd_reset, NULL},
+        {rebootpi_str, cmd_rebootpi, NULL},
         {prog_str, cmd_prog, prog_help},
         {bootid_str, cmd_bootid, bootid_help},
+        {newbootid_str, cmd_newbootid, NULL},
+        {printhmac_str, cmd_printhmac, printhmac_help},
     };
 
     if (readbuf[0] == '\0')
@@ -1251,7 +1347,7 @@ static void
 reboot_pi()
 {
     printf_P(PSTR("Real reboot now\n"));
-    boot_id_set = 0;
+    cmd_newbootid();
     // pull it low for 200ms
     PORT_PI_RESET &= ~_BV(PIN_PI_RESET);
     DDR_PI_RESET |= _BV(PIN_PI_RESET);
@@ -1260,6 +1356,15 @@ reboot_pi()
 	PORT_PI_WARNING &= ~_BV(PIN_PI_WARNING);
     DDR_PI_RESET &= ~_BV(PIN_PI_RESET);	
 }
+
+static void
+cmd_rebootpi()  
+{
+    printf_P(PSTR("Rebooting.\n"));
+    long_delay(1000);
+    reboot_pi();
+}
+
 
 static void
 wait_reboot_pi()
@@ -1396,14 +1501,14 @@ void wdt_init(void)
 
 int main(void)
 {
-    _Static_assert(F_CPU % 256 == 0, "clock prescaler remainder 0");
+    _Static_assert(F_CPU % 1024 == 0, "clock prescaler remainder 0");
     _Static_assert(NEWBOOT_MAX < WATCHDOG_LONG_MIN, "newboot max shorter than watchdog min");
     _Static_assert((F_CPU)%(16*(BAUD)) == 0, "baud rate good multiple");
 
     setup_chip();
     blink();
 
-    stdout = &mystdout;
+    stdout = raw_stdout;
     uart_on();
 
     long_delay(500);
@@ -1412,6 +1517,10 @@ int main(void)
     set_pi_boot_normal(0);
 
     load_params();
+
+    cmd_newbootid();
+    reset_uart_hmac();
+    stdout = &mystdout;
 
     setup_tick_counter();
 
