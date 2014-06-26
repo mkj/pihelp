@@ -7,7 +7,7 @@
 	<key>ApplicationVersion</key>
 	<array>
 		<string>com.omnigroup.OmniGraffle.MacAppStore</string>
-		<string>139.17</string>
+		<string>139.18</string>
 	</array>
 	<key>AutoAdjust</key>
 	<true/>
@@ -1020,7 +1020,7 @@
 						<key>Pad</key>
 						<integer>10</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\slleading200\pardirnatural\qc
@@ -1119,7 +1119,7 @@
 				<key>Pad</key>
 				<integer>0</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -1333,14 +1333,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -1519,7 +1518,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -1689,14 +1688,13 @@
 						jACGkoSioQCBqACGkoSioQCBxACG
 						koSioQCB4ACGkoSioQCB/ACGkoSi
 						oQCBGAGGkoSioQCBNAGGkoSioQCB
-						UAGGhoEACIQEWzFmXYPNzEw9hpKE
-						lpYGTlNGb250hpKEhIQGTlNGb250
-						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
-						SABlAGwAdgBlAHQAaQBjAGEAhAFm
-						CJsAmwGbAJsAhoaG
+						UAGGhgCGkoSWlgZOU0ZvbnSGkoSE
+						hAZOU0ZvbnQelJkchAVbMjhjXQYA
+						AAAUAAAA//5IAGUAbAB2AGUAdABp
+						AGMAYQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -1898,7 +1896,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2010,15 +2008,14 @@
 						VIaShKKhAHCGkoSioQCBjACGkoSi
 						oQCBqACGkoSioQCBxACGkoSioQCB
 						4ACGkoSioQCB/ACGkoSioQCBGAGG
-						koSioQCBNAGGkoSioQCBUAGGhoEA
-						CIQEWzFmXYPNzEw9hpKElpYGTlNG
-						b250hpKEhIQGTlNGb250HpSZHIQF
-						WzI4Y10GAAAAFAAAAP/+SABlAGwA
-						dgBlAHQAaQBjAGEAhAFmCJsAmwGb
-						AJsAhoaG
+						koSioQCBNAGGkoSioQCBUAGGhgCG
+						koSWlgZOU0ZvbnSGkoSEhAZOU0Zv
+						bnQelJkchAVbMjhjXQYAAAAUAAAA
+						//5IAGUAbAB2AGUAdABpAGMAYQCE
+						AWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2223,15 +2220,14 @@
 						VIaShKKhAHCGkoSioQCBjACGkoSi
 						oQCBqACGkoSioQCBxACGkoSioQCB
 						4ACGkoSioQCB/ACGkoSioQCBGAGG
-						koSioQCBNAGGkoSioQCBUAGGhoEA
-						CIQEWzFmXYPNzEw9hpKElpYGTlNG
-						b250hpKEhIQGTlNGb250HpSZHIQF
-						WzI4Y10GAAAAFAAAAP/+SABlAGwA
-						dgBlAHQAaQBjAGEAhAFmCJsAmwGb
-						AJsAhoaG
+						koSioQCBNAGGkoSioQCBUAGGhgCG
+						koSWlgZOU0ZvbnSGkoSEhAZOU0Zv
+						bnQelJkchAVbMjhjXQYAAAAUAAAA
+						//5IAGUAbAB2AGUAdABpAGMAYQCE
+						AWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2436,15 +2432,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2597,7 +2592,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2717,7 +2712,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2838,7 +2833,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -2975,7 +2970,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -3047,7 +3042,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -3218,7 +3213,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -3382,14 +3377,13 @@
 						koSioQCBqACGkoSioQCBxACGkoSi
 						oQCB4ACGkoSioQCB/ACGkoSioQCB
 						GAGGkoSioQCBNAGGkoSioQCBUAGG
-						hoEACIQEWzFmXYPNzEw9hpKElpYG
-						TlNGb250hpKEhIQGTlNGb250HpSZ
-						HIQFWzI4Y10GAAAAFAAAAP/+SABl
-						AGwAdgBlAHQAaQBjAGEAhAFmCJsA
-						mwGbAJsAhoaG
+						hgCGkoSWlgZOU0ZvbnSGkoSEhAZO
+						U0ZvbnQelJkchAVbMjhjXQYAAAAU
+						AAAA//5IAGUAbAB2AGUAdABpAGMA
+						YQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -3595,14 +3589,13 @@
 						koSioQCBqACGkoSioQCBxACGkoSi
 						oQCB4ACGkoSioQCB/ACGkoSioQCB
 						GAGGkoSioQCBNAGGkoSioQCBUAGG
-						hoEACIQEWzFmXYPNzEw9hpKElpYG
-						TlNGb250hpKEhIQGTlNGb250HpSZ
-						HIQFWzI4Y10GAAAAFAAAAP/+SABl
-						AGwAdgBlAHQAaQBjAGEAhAFmCJsA
-						mwGbAJsAhoaG
+						hgCGkoSWlgZOU0ZvbnSGkoSEhAZO
+						U0ZvbnQelJkchAVbMjhjXQYAAAAU
+						AAAA//5IAGUAbAB2AGUAdABpAGMA
+						YQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -3808,14 +3801,13 @@
 						koSioQCBqACGkoSioQCBxACGkoSi
 						oQCB4ACGkoSioQCB/ACGkoSioQCB
 						GAGGkoSioQCBNAGGkoSioQCBUAGG
-						hoEACIQEWzFmXYPNzEw9hpKElpYG
-						TlNGb250hpKEhIQGTlNGb250HpSZ
-						HIQFWzI4Y10GAAAAFAAAAP/+SABl
-						AGwAdgBlAHQAaQBjAGEAhAFmCJsA
-						mwGbAJsAhoaG
+						hgCGkoSWlgZOU0ZvbnSGkoSEhAZO
+						U0ZvbnQelJkchAVbMjhjXQYAAAAU
+						AAAA//5IAGUAbAB2AGUAdABpAGMA
+						YQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4021,14 +4013,13 @@
 						koSioQCBqACGkoSioQCBxACGkoSi
 						oQCB4ACGkoSioQCB/ACGkoSioQCB
 						GAGGkoSioQCBNAGGkoSioQCBUAGG
-						hoEACIQEWzFmXYPNzEw9hpKElpYG
-						TlNGb250hpKEhIQGTlNGb250HpSZ
-						HIQFWzI4Y10GAAAAFAAAAP/+SABl
-						AGwAdgBlAHQAaQBjAGEAhAFmCJsA
-						mwGbAJsAhoaG
+						hgCGkoSWlgZOU0ZvbnSGkoSEhAZO
+						U0ZvbnQelJkchAVbMjhjXQYAAAAU
+						AAAA//5IAGUAbAB2AGUAdABpAGMA
+						YQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4143,15 +4134,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4276,14 +4266,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4489,14 +4478,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4611,15 +4599,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4744,14 +4731,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -4957,14 +4943,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -5170,14 +5155,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -5383,14 +5367,13 @@
 						jACGkoSioQCBqACGkoSioQCBxACG
 						koSioQCB4ACGkoSioQCB/ACGkoSi
 						oQCBGAGGkoSioQCBNAGGkoSioQCB
-						UAGGhoEACIQEWzFmXYPNzEw9hpKE
-						lpYGTlNGb250hpKEhIQGTlNGb250
-						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
-						SABlAGwAdgBlAHQAaQBjAGEAhAFm
-						CJsAmwGbAJsAhoaG
+						UAGGhgCGkoSWlgZOU0ZvbnSGkoSE
+						hAZOU0ZvbnQelJkchAVbMjhjXQYA
+						AAAUAAAA//5IAGUAbAB2AGUAdABp
+						AGMAYQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -5596,14 +5579,13 @@
 						koSioQCBqACGkoSioQCBxACGkoSi
 						oQCB4ACGkoSioQCB/ACGkoSioQCB
 						GAGGkoSioQCBNAGGkoSioQCBUAGG
-						hoEACIQEWzFmXYPNzEw9hpKElpYG
-						TlNGb250hpKEhIQGTlNGb250HpSZ
-						HIQFWzI4Y10GAAAAFAAAAP/+SABl
-						AGwAdgBlAHQAaQBjAGEAhAFmCJsA
-						mwGbAJsAhoaG
+						hgCGkoSWlgZOU0ZvbnSGkoSEhAZO
+						U0ZvbnQelJkchAVbMjhjXQYAAAAU
+						AAAA//5IAGUAbAB2AGUAdABpAGMA
+						YQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -5809,14 +5791,13 @@
 						gYwAhpKEoqEAgagAhpKEoqEAgcQA
 						hpKEoqEAgeAAhpKEoqEAgfwAhpKE
 						oqEAgRgBhpKEoqEAgTQBhpKEoqEA
-						gVABhoaBAAiEBFsxZl2DzcxMPYaS
-						hJaWBk5TRm9udIaShISEBk5TRm9u
-						dB6UmRyEBVsyOGNdBgAAABQAAAD/
-						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
-						ZgibAJsBmwCbAIaGhg==
+						gVABhoYAhpKElpYGTlNGb250hpKE
+						hIQGTlNGb250HpSZHIQFWzI4Y10G
+						AAAAFAAAAP/+SABlAGwAdgBlAHQA
+						aQBjAGEAhAFmCJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -6022,14 +6003,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -6206,7 +6186,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -6295,7 +6275,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -6384,7 +6364,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -6473,7 +6453,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -6562,7 +6542,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -6651,7 +6631,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -6916,7 +6896,7 @@
 				<key>Pad</key>
 				<integer>0</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -7031,14 +7011,13 @@
 						hpKEoqEAgagAhpKEoqEAgcQAhpKE
 						oqEAgeAAhpKEoqEAgfwAhpKEoqEA
 						gRgBhpKEoqEAgTQBhpKEoqEAgVAB
-						hoaBAAiEBFsxZl2DzcxMPYaShJaW
-						Bk5TRm9udIaShISEBk5TRm9udB6U
-						mRyEBVsyOGNdBgAAABQAAAD//kgA
-						ZQBsAHYAZQB0AGkAYwBhAIQBZgib
-						AJsBmwCbAIaGhg==
+						hoYAhpKElpYGTlNGb250hpKEhIQG
+						TlNGb250HpSZHIQFWzI4Y10GAAAA
+						FAAAAP/+SABlAGwAdgBlAHQAaQBj
+						AGEAhAFmCJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -7244,14 +7223,13 @@
 						hKKhAIGoAIaShKKhAIHEAIaShKKh
 						AIHgAIaShKKhAIH8AIaShKKhAIEY
 						AYaShKKhAIE0AYaShKKhAIFQAYaG
-						gQAIhARbMWZdg83MTD2GkoSWlgZO
-						U0ZvbnSGkoSEhAZOU0ZvbnQelJkc
-						hAVbMjhjXQYAAAAUAAAA//5IAGUA
-						bAB2AGUAdABpAGMAYQCEAWYImwCb
-						AZsAmwCGhoY=
+						AIaShJaWBk5TRm9udIaShISEBk5T
+						Rm9udB6UmRyEBVsyOGNdBgAAABQA
+						AAD//kgAZQBsAHYAZQB0AGkAYwBh
+						AIQBZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -7457,14 +7435,13 @@
 						gYwAhpKEoqEAgagAhpKEoqEAgcQA
 						hpKEoqEAgeAAhpKEoqEAgfwAhpKE
 						oqEAgRgBhpKEoqEAgTQBhpKEoqEA
-						gVABhoaBAAiEBFsxZl2DzcxMPYaS
-						hJaWBk5TRm9udIaShISEBk5TRm9u
-						dB6UmRyEBVsyOGNdBgAAABQAAAD/
-						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
-						ZgibAJsBmwCbAIaGhg==
+						gVABhoYAhpKElpYGTlNGb250hpKE
+						hIQGTlNGb250HpSZHIQFWzI4Y10G
+						AAAAFAAAAP/+SABlAGwAdgBlAHQA
+						aQBjAGEAhAFmCJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -7670,14 +7647,13 @@
 						koSioQCBqACGkoSioQCBxACGkoSi
 						oQCB4ACGkoSioQCB/ACGkoSioQCB
 						GAGGkoSioQCBNAGGkoSioQCBUAGG
-						hoEACIQEWzFmXYPNzEw9hpKElpYG
-						TlNGb250hpKEhIQGTlNGb250HpSZ
-						HIQFWzI4Y10GAAAAFAAAAP/+SABl
-						AGwAdgBlAHQAaQBjAGEAhAFmCJsA
-						mwGbAJsAhoaG
+						hgCGkoSWlgZOU0ZvbnSGkoSEhAZO
+						U0ZvbnQelJkchAVbMjhjXQYAAAAU
+						AAAA//5IAGUAbAB2AGUAdABpAGMA
+						YQCEAWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -7882,15 +7858,14 @@
 						VIaShKKhAHCGkoSioQCBjACGkoSi
 						oQCBqACGkoSioQCBxACGkoSioQCB
 						4ACGkoSioQCB/ACGkoSioQCBGAGG
-						koSioQCBNAGGkoSioQCBUAGGhoEA
-						CIQEWzFmXYPNzEw9hpKElpYGTlNG
-						b250hpKEhIQGTlNGb250HpSZHIQF
-						WzI4Y10GAAAAFAAAAP/+SABlAGwA
-						dgBlAHQAaQBjAGEAhAFmCJsAmwGb
-						AJsAhoaG
+						koSioQCBNAGGkoSioQCBUAGGhgCG
+						koSWlgZOU0ZvbnSGkoSEhAZOU0Zv
+						bnQelJkchAVbMjhjXQYAAAAUAAAA
+						//5IAGUAbAB2AGUAdABpAGMAYQCE
+						AWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -8095,15 +8070,14 @@
 						VIaShKKhAHCGkoSioQCBjACGkoSi
 						oQCBqACGkoSioQCBxACGkoSioQCB
 						4ACGkoSioQCB/ACGkoSioQCBGAGG
-						koSioQCBNAGGkoSioQCBUAGGhoEA
-						CIQEWzFmXYPNzEw9hpKElpYGTlNG
-						b250hpKEhIQGTlNGb250HpSZHIQF
-						WzI4Y10GAAAAFAAAAP/+SABlAGwA
-						dgBlAHQAaQBjAGEAhAFmCJsAmwGb
-						AJsAhoaG
+						koSioQCBNAGGkoSioQCBUAGGhgCG
+						koSWlgZOU0ZvbnSGkoSEhAZOU0Zv
+						bnQelJkchAVbMjhjXQYAAAAUAAAA
+						//5IAGUAbAB2AGUAdABpAGMAYQCE
+						AWYImwCbAZsAmwCGhoY=
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -8326,7 +8300,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -8978,7 +8952,7 @@
 					<key>Text</key>
 					<dict>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9080,7 +9054,7 @@
 					<key>Text</key>
 					<dict>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9202,7 +9176,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9271,7 +9245,7 @@
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9413,7 +9387,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9503,7 +9477,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9593,7 +9567,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -9643,7 +9617,7 @@
 				<key>Pad</key>
 				<integer>0</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -10093,21 +10067,19 @@
 								oqEAgfwAhpKE
 								oqEAgRgBhpKE
 								oqEAgTQBhpKE
-								oqEAgVABhoaB
-								AAiEBFsxZl2D
-								zcxMPYaShJaW
-								Bk5TRm9udIaS
-								hISEBk5TRm9u
-								dB6UmRyEBVsy
-								OGNdBgAAABQA
-								AAD//kgAZQBs
-								AHYAZQB0AGkA
-								YwBhAIQBZgib
-								AJsBmwCbAIaG
-								hg==
+								oqEAgVABhoYA
+								hpKElpYGTlNG
+								b250hpKEhIQG
+								TlNGb250HpSZ
+								HIQFWzI4Y10G
+								AAAAFAAAAP/+
+								SABlAGwAdgBl
+								AHQAaQBjAGEA
+								hAFmCJsAmwGb
+								AJsAhoaG
 										</data>
 										<key>Text</key>
-										<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+										<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -10339,21 +10311,19 @@
 								oqEAgfwAhpKE
 								oqEAgRgBhpKE
 								oqEAgTQBhpKE
-								oqEAgVABhoaB
-								AAiEBFsxZl2D
-								zcxMPYaShJaW
-								Bk5TRm9udIaS
-								hISEBk5TRm9u
-								dB6UmRyEBVsy
-								OGNdBgAAABQA
-								AAD//kgAZQBs
-								AHYAZQB0AGkA
-								YwBhAIQBZgib
-								AJsBmwCbAIaG
-								hg==
+								oqEAgVABhoYA
+								hpKElpYGTlNG
+								b250hpKEhIQG
+								TlNGb250HpSZ
+								HIQFWzI4Y10G
+								AAAAFAAAAP/+
+								SABlAGwAdgBl
+								AHQAaQBjAGEA
+								hAFmCJsAmwGb
+								AJsAhoaG
 										</data>
 										<key>Text</key>
-										<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+										<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -10691,7 +10661,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -10780,7 +10750,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -10869,7 +10839,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -10958,7 +10928,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11047,7 +11017,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11136,7 +11106,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11225,7 +11195,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11314,7 +11284,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11403,7 +11373,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11492,7 +11462,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11579,7 +11549,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11631,7 +11601,7 @@
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11761,7 +11731,7 @@
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -11924,7 +11894,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -12011,7 +11981,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -12100,7 +12070,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -12189,7 +12159,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -12278,7 +12248,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -12395,15 +12365,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -12608,15 +12577,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -12821,15 +12789,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13034,15 +13001,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13157,15 +13123,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13289,15 +13254,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13502,15 +13466,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13625,15 +13588,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13757,15 +13719,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -13970,15 +13931,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -14183,15 +14143,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -14396,15 +14355,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -14609,15 +14567,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -14822,15 +14779,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -15035,15 +14991,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -15248,15 +15203,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -15461,15 +15415,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -15674,15 +15627,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -15887,15 +15839,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -16100,15 +16051,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -16223,15 +16173,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -16355,15 +16304,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -16568,15 +16516,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -16691,15 +16638,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -16823,15 +16769,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -17036,15 +16981,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -17249,15 +17193,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -17462,15 +17405,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -17675,15 +17617,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -17888,15 +17829,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -18101,15 +18041,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -18314,15 +18253,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -18499,7 +18437,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -18588,7 +18526,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -18677,7 +18615,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -18766,7 +18704,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -18855,7 +18793,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -18944,7 +18882,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19033,7 +18971,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19122,7 +19060,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19211,7 +19149,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19300,7 +19238,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19389,7 +19327,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19478,7 +19416,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19567,7 +19505,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19656,7 +19594,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19745,7 +19683,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19834,7 +19772,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -19923,7 +19861,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20012,7 +19950,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20101,7 +20039,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20190,7 +20128,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20279,7 +20217,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20368,7 +20306,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20457,7 +20395,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20546,7 +20484,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20600,7 +20538,7 @@
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20728,7 +20666,7 @@
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20883,7 +20821,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -20966,7 +20904,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -21049,7 +20987,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -21132,7 +21070,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -21215,7 +21153,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -21501,15 +21439,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -21885,15 +21822,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -22269,15 +22205,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -22653,15 +22588,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -23037,15 +22971,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -23421,15 +23354,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -23805,15 +23737,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -24189,15 +24120,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -24573,15 +24503,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -24957,15 +24886,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -25197,20 +25125,18 @@
 								hKKhAIEYAYaS
 								hKKhAIE0AYaS
 								hKKhAIFQAYaG
-								gQAIhARbMWZd
-								g83MTD2GkoSW
-								lgZOU0ZvbnSG
-								koSEhAZOU0Zv
-								bnQelJkchAVb
-								MjhjXQYAAAAU
-								AAAA//5IAGUA
-								bAB2AGUAdABp
-								AGMAYQCEAWYI
-								mwCbAZsAmwCG
-								hoY=
+								AIaShJaWBk5T
+								Rm9udIaShISE
+								Bk5TRm9udB6U
+								mRyEBVsyOGNd
+								BgAAABQAAAD/
+								/kgAZQBsAHYA
+								ZQB0AGkAYwBh
+								AIQBZgibAJsB
+								mwCbAIaGhg==
 								</data>
 								<key>Text</key>
-								<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+								<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -25436,21 +25362,19 @@
 								oqEAgfwAhpKE
 								oqEAgRgBhpKE
 								oqEAgTQBhpKE
-								oqEAgVABhoaB
-								AAiEBFsxZl2D
-								zcxMPYaShJaW
-								Bk5TRm9udIaS
-								hISEBk5TRm9u
-								dB6UmRyEBVsy
-								OGNdBgAAABQA
-								AAD//kgAZQBs
-								AHYAZQB0AGkA
-								YwBhAIQBZgib
-								AJsBmwCbAIaG
-								hg==
+								oqEAgVABhoYA
+								hpKElpYGTlNG
+								b250hpKEhIQG
+								TlNGb250HpSZ
+								HIQFWzI4Y10G
+								AAAAFAAAAP/+
+								SABlAGwAdgBl
+								AHQAaQBjAGEA
+								hAFmCJsAmwGb
+								AJsAhoaG
 								</data>
 								<key>Text</key>
-								<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+								<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -25830,15 +25754,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -26043,15 +25966,14 @@
 						hpKEoqEAcIaShKKhAIGMAIaShKKh
 						AIGoAIaShKKhAIHEAIaShKKhAIHg
 						AIaShKKhAIH8AIaShKKhAIEYAYaS
-						hKKhAIE0AYaShKKhAIFQAYaGgQAI
-						hARbMWZdg83MTD2GkoSWlgZOU0Zv
-						bnSGkoSEhAZOU0ZvbnQelJkchAVb
-						MjhjXQYAAAAUAAAA//5IAGUAbAB2
-						AGUAdABpAGMAYQCEAWYImwCbAZsA
-						mwCGhoY=
+						hKKhAIE0AYaShKKhAIFQAYaGAIaS
+						hJaWBk5TRm9udIaShISEBk5TRm9u
+						dB6UmRyEBVsyOGNdBgAAABQAAAD/
+						/kgAZQBsAHYAZQB0AGkAYwBhAIQB
+						ZgibAJsBmwCbAIaGhg==
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -26256,15 +26178,14 @@
 						koSioQBwhpKEoqEAgYwAhpKEoqEA
 						gagAhpKEoqEAgcQAhpKEoqEAgeAA
 						hpKEoqEAgfwAhpKEoqEAgRgBhpKE
-						oqEAgTQBhpKEoqEAgVABhoaBAAiE
-						BFsxZl2DzcxMPYaShJaWBk5TRm9u
-						dIaShISEBk5TRm9udB6UmRyEBVsy
-						OGNdBgAAABQAAAD//kgAZQBsAHYA
-						ZQB0AGkAYwBhAIQBZgibAJsBmwCb
-						AIaGhg==
+						oqEAgTQBhpKEoqEAgVABhoYAhpKE
+						lpYGTlNGb250hpKEhIQGTlNGb250
+						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
+						SABlAGwAdgBlAHQAaQBjAGEAhAFm
+						CJsAmwGbAJsAhoaG
 						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -26437,7 +26358,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -26520,7 +26441,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -26603,7 +26524,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -26686,7 +26607,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -26769,7 +26690,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -26852,7 +26773,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -26935,7 +26856,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27018,7 +26939,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27101,7 +27022,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27184,7 +27105,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27267,7 +27188,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27350,7 +27271,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27433,7 +27354,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27516,7 +27437,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27599,7 +27520,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27682,7 +27603,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27765,7 +27686,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27848,7 +27769,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -27931,7 +27852,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28014,7 +27935,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28097,7 +28018,7 @@
 				<key>Pad</key>
 				<integer>4</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 ArialNarrow;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28146,7 +28067,7 @@
 				<key>Pad</key>
 				<integer>0</integer>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
@@ -28242,7 +28163,7 @@
 								<key>Pad</key>
 								<integer>4</integer>
 								<key>Text</key>
-								<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+								<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28329,7 +28250,7 @@
 								<key>Pad</key>
 								<integer>4</integer>
 								<key>Text</key>
-								<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+								<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28416,7 +28337,7 @@
 								<key>Pad</key>
 								<integer>4</integer>
 								<key>Text</key>
-								<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+								<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28509,7 +28430,7 @@
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28597,7 +28518,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28670,7 +28591,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28753,7 +28674,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28836,7 +28757,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -28919,7 +28840,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29002,7 +28923,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29085,7 +29006,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29168,7 +29089,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29251,7 +29172,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29333,7 +29254,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29416,7 +29337,7 @@ Purpose}</string>
 						<key>Pad</key>
 						<integer>4</integer>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg65001\cocoartf1187\cocoasubrtf390
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
 \cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \deftab850
@@ -29616,7 +29537,7 @@ A\
 		<key>NSPaperName</key>
 		<array>
 			<string>string</string>
-			<string>92A97D79-E031-46B4-B44A-84AD54EBFC6D</string>
+			<string>5E54C5D4-0613-44EB-8D5E-EE61F5F00081</string>
 		</array>
 		<key>NSPaperSize</key>
 		<array>
@@ -29685,7 +29606,7 @@ A\
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{179.22705892014349, 12.077295075481366}, {918.84060934262243, 602.89857016802978}}</string>
+		<string>{{178.26087531410496, 12.077295075481366}, {918.84060934262232, 602.89857016802978}}</string>
 		<key>Zoom</key>
 		<real>1.0349999666213989</real>
 		<key>ZoomValues</key>
