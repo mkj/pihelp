@@ -12,5 +12,7 @@ A rough list of functionality is in the [read handler](main.c#L1134).
 I implemented this to use with [PCextreme's](https://www.pcextreme.nl/) 
 [Raspberry Colocation](http://raspberrycolocation.com/).
 
+The system boots an initramfs as a bootloader with SSH - [Dropbear](https://github.com/mkj/dropbear) of course. I then boot the real kernel with [kexec](http://manpages.ubuntu.com/manpages/precise/man8/kexec.8.html) - that allows low-risk upgrades over the network.
+
 ![schematic](pihelp.png)
 
