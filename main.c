@@ -835,7 +835,7 @@ cmd_vcc()
     uint16_t temp_deg = temp - 290;
     printf_P(PSTR("vcc: %u mV\n"
                     "5v: %u mV\n"
-                    "temp: %u mV (%dºC)\n"
+                    "temp: %u mV (%d°C)\n"
                     ),
         vcc, v5, temp, temp_deg);
 }

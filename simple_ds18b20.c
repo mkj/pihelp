@@ -184,7 +184,7 @@ simple_ds18b20_read_all()
 			printf_P(PSTR("CRC fail"));
 		}
 		printhex(id, OW_ROMCODE_SIZE, stdout);
-		printf_P(PSTR(" %d.%d ºC\n"), decicelsius/10, decicelsius % 10);
+		printf_P(PSTR(" %d.%d °C\n"), decicelsius/10, decicelsius % 10);
 	}
 	printf_P(PSTR("Done sensors\n"));
 	return DS18X20_OK;
